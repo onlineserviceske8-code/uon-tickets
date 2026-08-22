@@ -1,0 +1,14 @@
+{
+  "name": "campustickets",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Original event ticketing site — Node, zero dependencies",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "load-test": "node scripts/load-test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

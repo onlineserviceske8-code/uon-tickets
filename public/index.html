@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>University of Nairobi Freshers Night · campustickets</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="nav-left">
+      <a class="brand" href="/">campus<span>tickets</span></a>
+      <a class="nav-link" href="#tickets">Events</a>
+      <a class="nav-link" href="#about">About</a>
+    </div>
+    <div class="nav-right">
+      <input class="search" type="search" placeholder="Search events…" />
+      <button id="find-order-btn" class="btn ghost small">Find ticket</button>
+      <button class="btn primary small">Sign in</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <header class="event-head reveal visible">
+      <span class="tag" id="ev-category">festival</span>
+      <h1 id="ev-title">University of Nairobi Freshers Night</h1>
+      <p class="event-meta">
+        <span>📅 <span id="ev-date"></span></span>
+        <span class="dot">·</span>
+        <span>📍 <strong id="ev-venue"></strong>, <span id="ev-city"></span></span>
+      </p>
+    </header>
+
+    <div class="layout">
+      <section class="content" id="about">
+        <h2>About this event</h2>
+        <p id="ev-about"></p>
+
+        <ul class="highlights" id="ev-highlights"></ul>
+
+        <h2>Venue</h2>
+        <div class="venue-card">
+          <p class="venue-name" id="ev-venue-name"></p>
+          <p class="venue-city" id="ev-venue-city"></p>
+        </div>
+
+        <h2>Refunds</h2>
+        <p class="refund-note" id="ev-refunds"></p>
+      </section>
+
+      <aside class="ticket-rail" id="tickets">
+        <div class="ticket-card">
+          <div class="from-row">
+            <span>From</span>
+            <strong id="from-price">KSh —</strong>
+          </div>
+
+          <p class="tickets-label">Tickets</p>
+
+          <div id="tier-rows"></div>
+
+          <div class="total-row">
+            <span>Total</span>
+            <strong id="cart-total">KSh 0</strong>
+          </div>
+
+          <button class="btn primary wide" id="checkout-btn">Select tickets</button>
+          <p class="pay-methods">Mobile Money · Card</p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-cols">
+      <div><h4>Discover</h4><a href="#">Events</a><a href="#">Live now</a></div>
+      <div><h4>Organisers</h4><a href="#">List an event</a></div>
+      <div><h4>Help</h4><a href="#" id="find-order-btn2">Support</a><a href="#refunds">Refunds</a></div>
+      <div><h4>Company</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
+    </div>
+    <p class="copyright">campustickets — original demo code &amp; content · © 2026</p>
+  </footer>
+
+  <dialog id="checkout-modal">
+    <form class="modal-inner" id="checkout-form">
+      <h3>Checkout</h3>
+      <div class="field"><label>Name</label><input type="text" name="name" required placeholder="Full name" /></div>
+      <div class="field"><label>Email</label><input type="email" name="email" required placeholder="you@example.com" /></div>
+      <div class="field"><label>Phone</label><input type="tel" name="phone" required placeholder="+254 7XX XXX XXX" /></div>
+      <div class="field">
+        <label>Payment method</label>
+        <select name="paymentMethod">
+          <option value="mobile-money">Mobile Money</option>
+          <option value="card">Card</option>
+        </select>
+      </div>
+      <p class="error" id="checkout-error" hidden></p>
+      <div class="modal-actions">
+        <button type="button" class="btn ghost" id="checkout-cancel">Back</button>
+        <button type="submit" class="btn primary" id="checkout-pay">Pay now</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="ticket-modal">
+    <div class="modal-inner confirm">
+      <h3>You're in! 🎉</h3>
+      <p class="confirm-sub">Show this QR code at the gate.</p>
+      <img id="ticket-qr" alt="Ticket QR code" />
+      <p class="confirm-ref" id="ticket-ref"></p>
+      <div id="ticket-summary"></div>
+      <button class="btn primary wide" id="ticket-close">Done</button>
+    </div>
+  </dialog>
+
+  <script src="/app.js"></script>
+</body>
+</html>

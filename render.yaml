@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: campustickets
+    runtime: node
+    plan: free
+    startCommand: node server.js
+    healthCheckPath: /api/event
+    envVars:
+      - key: NODE_ENV
+        value: production
