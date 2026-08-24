@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - UoN Tickets</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f5f5; min-height: 100vh; }
+    .login-container { max-width: 400px; margin: 100px auto; padding: 40px; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    .login-container h1 { margin-bottom: 24px; color: #1a1a1a; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; margin-bottom: 6px; font-weight: 500; }
+    input[type="password"] { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; }
+    button { width: 100%; padding: 12px; background: #1a1a1a; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; }
+    button:hover { background: #333; }
+    button:disabled { background: #999; cursor: not-allowed; }
+    .error { color: #dc2626; margin-top: 12px; text-align: center; }
+    .success { color: #16a34a; margin-top: 12px; text-align: center; }
+    
+    .admin-layout { display: none; }
+    .admin-layout.active { display: flex; min-height: 100vh; }
+    .sidebar { width: 260px; background: white; border-right: 1px solid #e5e5e5; padding: 20px; position: fixed; height: 100vh; overflow-y: auto; }
+    .sidebar h2 { font-size: 18px; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid #e5e5e5; }
+    .nav-item { display: block; padding: 12px 16px; margin-bottom: 4px; border-radius: 8px; color: #4b5563; text-decoration: none; font-weight: 500; }
+    .nav-item:hover, .nav-item.active { background: #f3f4f6; color: #1a1a1a; }
+    .main-content { flex: 1; margin-left: 260px; padding: 32px; }
+    .page { display: none; }
+    .page.active { display: block; }
+    .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .page-header h1 { font-size: 24px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px; }
+    .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .stat-card .label { font-size: 14px; color: #6b7280; margin-bottom: 4px; }
+    .stat-card .value { font-size: 28px; font-weight: 700; color: #1a1a1a; }
+    .table-container { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 14px 16px; text-align: left; border-bottom: 1px solid #e5e5e5; }
+    th { background: #f9fafb; font-weight: 600; color: #374151; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; }
+    tr:hover td { background: #f9fafb; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+    .badge-paid { background: #dcfce7; color: #166534; }
+    .badge-pending { background: #fef3c7; color: #92400e; }
+    .badge-failed { background: #fee2e2; color: #991b1b; }
+    .badge-confirmed { background: #dbeafe; color: #1e40af; }
+    .badge-refunded { background: #f3f4f6; color: #374151; }
+    .action-btn { padding: 6px 12px; border: none; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; margin-right: 8px; }
+    .btn-primary { background: #1a1a1a; color: white; }
+    .btn-danger { background: #fee2e2; color: #991b1b; }
+    .btn-secondary { background: #f3f4f6; color: #374151; }
+    .filters { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .filters select, .filters input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; }
+    .pagination { display: flex; justify-content: center; gap: 8px; padding: 16px; }
+    .pagination button { padding: 8px 16px; border: 1px solid #ddd; background: white; border-radius: 6px; cursor: pointer; }
+    .pagination button.active { background: #1a1a1a; color: white; border-color: #1a1a1a; }
+    .pagination button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center; }
+    .modal.active { display: flex; }
+    .modal-content { background: white; padding: 24px; border-radius: 12px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .modal-close { background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280; width: auto; }
+    textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; min-height: 100px; resize: vertical; }
+    .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px; }
+    .qr-code { max-width: 200px; margin: 8px 0; }
+    .ticket-list { display: grid; gap: 8px; }
+    .ticket-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f9fafb; border-radius: 8px; }
+    .empty-state { text-align: center; padding: 48px; color: #6b7280; }
+    .logout-btn { margin-top: 24px; background: #fee2e2; color: #991b1b; }
+    .logout-btn:hover { background: #fecaca; }
+  </style>
+</head>
+<body>
+  <div class="login-container" id="loginContainer">
+    <h1>Admin Login</h1>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required autocomplete="current-password">
+      </div>
+      <button type="submit" id="loginBtn">Sign In</button>
+    </form>
+    <div id="loginError" class="error"></div>
+  </div>
+
+  <div class="admin-layout" id="adminLayout">
+    <aside class="sidebar">
+      <h2>Admin Panel</h2>
+      <a href="#" class="nav-item active" data-page="dashboard">Dashboard</a>
+      <a href="#" class="nav-item" data-page="orders">Orders</a>
+      <a href="#" class="nav-item" data-page="payments">Payments</a>
+      <a href="#" class="nav-item" data-page="events">Events</a>
+      <button class="nav-item logout-btn" id="logoutBtn">Logout</button>
+    </aside>
+    <main class="main-content">
+      <section class="page active" id="page-dashboard">
+        <div class="page-header"><h1>Dashboard</h1></div>
+        <div class="stats-grid" id="statsGrid"></div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Order</th><th>Customer</th><th>Total</th><th>Status</th><th>Payment</th><th>Date</th></tr></thead>
+            <tbody id="recentOrders"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="page" id="page-orders">
+        <div class="page-header"><h1>Orders</h1></div>
+        <div class="filters">
+          <select id="orderStatusFilter"><option value="">All Status</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="payment_failed">Payment Failed</option><option value="refunded">Refunded</option></select>
+          <select id="orderPaymentFilter"><option value="">All Payment Status</option><option value="pending">Pending</option><option value="paid">Paid</option><option value="failed">Failed</option><option value="refunded">Refunded</option></select>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Order #</th><th>Customer</th><th>Items</th><th>Total</th><th>Status</th><th>Payment</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody id="ordersTable"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="ordersPagination"></div>
+      </section>
+
+      <section class="page" id="page-payments">
+        <div class="page-header"><h1>Payments</h1></div>
+        <div class="filters">
+          <select id="paymentStatusFilter"><option value="">All Status</option><option value="initiated">Initiated</option><option value="pending_stk">Pending STK</option><option value="completed">Completed</option><option value="failed">Failed</option><option value="refunded">Refunded</option></select>
+          <select id="paymentMethodFilter"><option value="">All Methods</option><option value="mpesa">M-Pesa</option><option value="card">Card</option><option value="manual">Manual</option></select>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Session ID</th><th>Order #</th><th>Method</th><th>Amount</th><th>Status</th><th>Phone</th><th>Date</th><th>Actions</th></tr></thead>
+            <tbody id="paymentsTable"></tbody>
+          </table>
+        </div>
+        <div class="pagination" id="paymentsPagination"></div>
+      </section>
+
+      <section class="page" id="page-events">
+        <div class="page-header"><h1>Events</h1></div>
+        <div class="table-container">
+          <table>
+            <thead><tr><th>Event</th><th>Date</th><th>Venue</th><th>Status</th><th>Tickets Sold</th><th>Revenue</th><th>Actions</th></tr></thead>
+            <tbody id="eventsTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal" id="detailModal">
+    <div class="modal-content">
+      <div class="modal-header"><h3 id="modalTitle">Details</h3><button class="modal-close" onclick="closeModal()">&times;</button></div>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <div class="modal" id="actionModal">
+    <div class="modal-content">
+      <div class="modal-header"><h3 id="actionTitle">Action</h3><button class="modal-close" onclick="closeActionModal()">&times;</button></div>
+      <div id="actionContent"></div>
+      <div class="modal-actions">
+        <button class="action-btn btn-secondary" onclick="closeActionModal()">Cancel</button>
+        <button class="action-btn btn-primary" id="confirmActionBtn">Confirm</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentPage = 1;
+    let currentOrdersPage = 1;
+    let currentPaymentsPage = 1;
+    let actionCallback = null;
+
+    async function api(path, options = {}) {
+      const res = await fetch(path, {
+        ...options,
+        headers: { 'Content-Type': 'application/json', ...options.headers },
+        credentials: 'include'
+      });
+      if (res.status === 401) { showLogin(); throw new Error('Unauthorized'); }
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Request failed');
+      return data;
+    }
+
+    function showLogin() {
+      document.getElementById('loginContainer').style.display = 'block';
+      document.getElementById('adminLayout').classList.remove('active');
+    }
+
+    function showAdmin() {
+      document.getElementById('loginContainer').style.display = 'none';
+      document.getElementById('adminLayout').classList.add('active');
+      loadDashboard();
+    }
+
+    async function checkAuth() {
+      try {
+        await api('/api/admin/me');
+        showAdmin();
+      } catch { showLogin(); }
+    }
+
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('loginBtn');
+      const error = document.getElementById('loginError');
+      btn.disabled = true; btn.textContent = 'Signing in...'; error.textContent = '';
+      try {
+        await api('/api/admin/login', { method: 'POST', body: JSON.stringify({ password: document.getElementById('password').value }) });
+        showAdmin();
+      } catch (err) { error.textContent = err.message; }
+      finally { btn.disabled = false; btn.textContent = 'Sign In'; }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await api('/api/admin/logout', { method: 'POST' });
+      showLogin();
+    });
+
+    document.querySelectorAll('.nav-item[data-page]').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.nav-item[data-page]').forEach(n => n.classList.remove('active'));
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        item.classList.add('active');
+        document.getElementById('page-' + item.dataset.page).classList.add('active');
+        if (item.dataset.page === 'orders') loadOrders();
+        if (item.dataset.page === 'payments') loadPayments();
+        if (item.dataset.page === 'events') loadEvents();
+      });
+    });
+
+    async function loadDashboard() {
+      try {
+        const stats = await api('/api/admin/events/b1011a/stats');
+        document.getElementById('statsGrid').innerHTML = `
+          <div class="stat-card"><div class="label">Total Orders</div><div class="value">${stats.totalOrders}</div></div>
+          <div class="stat-card"><div class="label">Paid Orders</div><div class="value">${stats.paidOrders}</div></div>
+          <div class="stat-card"><div class="label">Pending Orders</div><div class="value">${stats.pendingOrders}</div></div>
+          <div class="stat-card"><div class="label">Failed Orders</div><div class="value">${stats.failedOrders}</div></div>
+          <div class="stat-card"><div class="label">Total Revenue</div><div class="value">KSh ${stats.totalRevenue.toLocaleString()}</div></div>
+          <div class="stat-card"><div class="label">Tickets Sold</div><div class="value">${stats.totalTicketsSold}</div></div>
+        `;
+        const ordersRes = await api('/api/admin/orders?limit=10');
+        document.getElementById('recentOrders').innerHTML = ordersRes.orders.map(o => `
+          <tr><td>${o.orderNumber}</td><td>${o.customer.name} (${o.customer.email})</td><td>KSh ${o.total.toLocaleString()}</td><td><span class="badge badge-${o.status}">${o.status}</span></td><td><span class="badge badge-${o.paymentStatus}">${o.paymentStatus}</span></td><td>${new Date(o.createdAt).toLocaleString()}</td></tr>
+        `).join('') || '<tr><td colspan="6" class="empty-state">No orders yet</td></tr>';
+      } catch (err) { console.error(err); }
+    }
+
+    async function loadOrders(page = 1) {
+      currentOrdersPage = page;
+      const status = document.getElementById('orderStatusFilter').value;
+      const paymentStatus = document.getElementById('orderPaymentFilter').value;
+      try {
+        const res = await api(`/api/admin/orders?page=${page}&limit=20${status ? '&status=' + status : ''}${paymentStatus ? '&paymentStatus=' + paymentStatus : ''}`);
+        document.getElementById('ordersTable').innerHTML = res.orders.map(o => `
+          <tr>
+            <td>${o.orderNumber}</td>
+            <td>${o.customer.name}<br><small>${o.customer.email} / ${o.customer.phone}</small></td>
+            <td>${o.items.map(i => `${i.quantity}x ${i.name}`).join('<br>')}</td>
+            <td>KSh ${o.total.toLocaleString()}</td>
+            <td><span class="badge badge-${o.status}">${o.status}</span></td>
+            <td><span class="badge badge-${o.paymentStatus}">${o.paymentStatus}</span></td>
+            <td>${new Date(o.createdAt).toLocaleString()}</td>
+            <td>
+              <button class="action-btn btn-primary" onclick="viewOrder('${o.id}')">View</button>
+              ${o.paymentStatus === 'paid' ? `<button class="action-btn btn-danger" onclick="confirmRefund('${o.id}')">Refund</button>` : ''}
+            </td>
+          </tr>
+        `).join('') || '<tr><td colspan="8" class="empty-state">No orders found</td></tr>';
+        renderPagination('ordersPagination', page, res.totalPages, loadOrders);
+      } catch (err) { console.error(err); }
+    }
+
+    ['orderStatusFilter', 'orderPaymentFilter'].forEach(id => {
+      document.getElementById(id).addEventListener('change', () => loadOrders(1));
+    });
+
+    async function loadPayments(page = 1) {
+      currentPaymentsPage = page;
+      const status = document.getElementById('paymentStatusFilter').value;
+      const method = document.getElementById('paymentMethodFilter').value;
+      try {
+        const res = await api(`/api/admin/payments?page=${page}&limit=20${status ? '&status=' + status : ''}${method ? '&method=' + method : ''}`);
+        document.getElementById('paymentsTable').innerHTML = res.payments.map(p => `
+          <tr>
+            <td>${p.sessionId.slice(0, 12)}...</td>
+            <td>${p.order?.orderNumber || 'N/A'}</td>
+            <td>${p.method || '-'}</td>
+            <td>${p.order ? 'KSh ' + p.order.total.toLocaleString() : '-'}</td>
+            <td><span class="badge badge-${p.status}">${p.status}</span></td>
+            <td>${p.phoneNumber || '-'}</td>
+            <td>${p.order ? new Date(p.order.createdAt).toLocaleString() : '-'}</td>
+            <td>
+              ${p.status !== 'completed' && p.status !== 'refunded' ? `<button class="action-btn btn-primary" onclick="confirmMarkPaid('${p.sessionId}')">Mark Paid</button>` : ''}
+              ${p.status === 'completed' ? `<button class="action-btn btn-danger" onclick="confirmRefundPayment('${p.sessionId}')">Refund</button>` : ''}
+            </td>
+          </tr>
+        `).join('') || '<tr><td colspan="8" class="empty-state">No payments found</td></tr>';
+        renderPagination('paymentsPagination', page, res.totalPages, loadPayments);
+      } catch (err) { console.error(err); }
+    }
+
+    ['paymentStatusFilter', 'paymentMethodFilter'].forEach(id => {
+      document.getElementById(id).addEventListener('change', () => loadPayments(1));
+    });
+
+    async function loadEvents() {
+      try {
+        const stats = await api('/api/admin/events/b1011a/stats');
+        document.getElementById('eventsTable').innerHTML = `
+          <tr>
+            <td>${stats.eventName}</td>
+            <td>${new Date(stats.eventDate || stats.date).toLocaleDateString()}</td>
+            <td>${stats.venue || 'KICC, Nairobi'}</td>
+            <td><span class="badge badge-confirmed">Published</span></td>
+            <td>${stats.totalTicketsSold}</td>
+            <td>KSh ${stats.totalRevenue.toLocaleString()}</td>
+            <td><button class="action-btn btn-primary" onclick="viewEventStats()">View Details</button></td>
+          </tr>
+        `;
+      } catch (err) { console.error(err); }
+    }
+
+    function renderPagination(containerId, page, totalPages, callback) {
+      const container = document.getElementById(containerId);
+      let html = '';
+      if (page > 1) html += `<button onclick="${callback.name}(${page - 1})">← Prev</button>`;
+      for (let i = Math.max(1, page - 2); i <= Math.min(totalPages, page + 2); i++) {
+        html += `<button class="${i === page ? 'active' : ''}" onclick="${callback.name}(${i})">${i}</button>`;
+      }
+      if (page < totalPages) html += `<button onclick="${callback.name}(${page + 1})">Next →</button>`;
+      container.innerHTML = html;
+    }
+
+    async function viewOrder(id) {
+      try {
+        const order = await api(`/api/admin/orders/${id}`);
+        let ticketsHtml = '';
+        if (order.tickets && order.tickets.length) {
+          ticketsHtml = '<h4>Tickets</h4><div class="ticket-list">' + order.tickets.map(t => `
+            <div class="ticket-item">
+              <span>${t.ticketType} - ${t.id.slice(0, 8)}...</span>
+              ${t.qrCode ? `<img src="${t.qrCode}" class="qr-code" alt="QR">` : ''}
+            </div>
+          `).join('') + '</div>';
+        }
+        document.getElementById('modalTitle').textContent = `Order ${order.orderNumber}`;
+        document.getElementById('modalContent').innerHTML = `
+          <p><strong>Customer:</strong> ${order.customer.name} (${order.customer.email}, ${order.customer.phone})</p>
+          <p><strong>Total:</strong> KSh ${order.total.toLocaleString()}</p>
+          <p><strong>Status:</strong> <span class="badge badge-${order.status}">${order.status}</span></p>
+          <p><strong>Payment:</strong> <span class="badge badge-${order.paymentStatus}">${order.paymentStatus}</span></p>
+          <p><strong>Created:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
+          <h4>Items</h4>
+          <table style="width:100%;font-size:14px;"><thead><tr><th>Type</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead>
+          <tbody>${order.items.map(i => `<tr><td>${i.name}</td><td>${i.quantity}</td><td>KSh ${i.unitPrice.toLocaleString()}</td><td>KSh ${i.lineTotal.toLocaleString()}</td></tr>`).join('')}</tbody></table>
+          ${ticketsHtml}
+        `;
+        document.getElementById('detailModal').classList.add('active');
+      } catch (err) { alert(err.message); }
+    }
+
+    function confirmRefund(orderId) {
+      actionCallback = async () => {
+        const reason = document.getElementById('refundReason').value;
+        await api(`/api/admin/payments/${orderId}/refund`, { method: 'POST', body: JSON.stringify({ reason }) });
+        loadOrders(currentOrdersPage);
+        closeActionModal();
+      };
+      document.getElementById('actionTitle').textContent = 'Refund Order';
+      document.getElementById('actionContent').innerHTML = '<textarea id="refundReason" placeholder="Refund reason (required)"></textarea>';
+      document.getElementById('confirmActionBtn').onclick = () => actionCallback();
+      document.getElementById('actionModal').classList.add('active');
+    }
+
+    function confirmMarkPaid(sessionId) {
+      actionCallback = async () => {
+        await api(`/api/admin/payments/${sessionId}/mark-paid`, { method: 'POST' });
+        loadPayments(currentPaymentsPage);
+        loadOrders(currentOrdersPage);
+        closeActionModal();
+      };
+      document.getElementById('actionTitle').textContent = 'Mark as Paid';
+      document.getElementById('actionContent').innerHTML = '<p>Manually mark this payment as completed? This will generate tickets.</p>';
+      document.getElementById('confirmActionBtn').onclick = () => actionCallback();
+      document.getElementById('actionModal').classList.add('active');
+    }
+
+    function confirmRefundPayment(sessionId) {
+      actionCallback = async () => {
+        const reason = document.getElementById('refundReason').value;
+        await api(`/api/admin/payments/${sessionId}/refund`, { method: 'POST', body: JSON.stringify({ reason }) });
+        loadPayments(currentPaymentsPage);
+        loadOrders(currentOrdersPage);
+        closeActionModal();
+      };
+      document.getElementById('actionTitle').textContent = 'Refund Payment';
+      document.getElementById('actionContent').innerHTML = '<textarea id="refundReason" placeholder="Refund reason (required)"></textarea>';
+      document.getElementById('confirmActionBtn').onclick = () => actionCallback();
+      document.getElementById('actionModal').classList.add('active');
+    }
+
+    function viewEventStats() {
+      document.querySelector('[data-page="dashboard"]').click();
+    }
+
+    function closeModal() { document.getElementById('detailModal').classList.remove('active'); }
+    function closeActionModal() { document.getElementById('actionModal').classList.remove('active'); }
+
+    checkAuth();
+  </script>
+</body>
+</html>

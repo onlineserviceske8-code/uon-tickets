@@ -1,10 +1,16 @@
 services:
   - type: web
-    name: campustickets
+    name: uon-tickets
     runtime: node
-    plan: free
-    startCommand: node server.js
-    healthCheckPath: /api/event
+    rootDir: mock-server
+    buildCommand: npm install
+    startCommand: npm start
     envVars:
       - key: NODE_ENV
         value: production
+      - key: PORT
+        value: "10000"
+      - key: ADMIN_PASSWORD
+        generateValue: true
+      - key: ADMIN_SESSION_SECRET
+        generateValue: true
