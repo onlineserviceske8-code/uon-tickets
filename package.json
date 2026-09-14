@@ -1,14 +1,8 @@
 {
-  "name": "campustickets",
+  "name": "uon-tickets-api",
   "version": "1.0.0",
-  "private": true,
-  "description": "Original event ticketing site — Node, zero dependencies",
-  "main": "server.js",
-  "scripts": {
-    "start": "node server.js",
-    "load-test": "node scripts/load-test.js"
-  },
-  "engines": {
-    "node": ">=18"
+  "type": "module",
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
   }
 }

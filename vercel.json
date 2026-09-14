@@ -1,0 +1,8 @@
+{
+  "buildCommand": "echo 'no build needed'",
+  "installCommand": "npm install",
+  "framework": null,
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/public/index.html" }
+  ]
+}

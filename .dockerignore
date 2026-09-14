@@ -1,9 +1,0 @@
-data
-node_modules
-.git
-.gitignore
-*.log
-*.pid
-Dockerfile
-.dockerignore
-render.yaml

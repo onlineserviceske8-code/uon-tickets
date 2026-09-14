@@ -1,118 +1,581 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>University of Nairobi Freshers Night · campustickets</title>
-  <link rel="stylesheet" href="/styles.css" />
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>University of Nairobi Freshers Night - Madfun</title>
+<meta name="description" content="UNSA Freshers Night 2026 — the official welcome party for University of Nairobi's newest students."/>
+<link rel="stylesheet" href="./04qd-a12.f_2_.css"/>
+<link rel="stylesheet" href="./0qfvefbovd.bu.css"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        'color-ink': 'var(--ink)',
+        'color-ink-soft': 'var(--ink-soft)',
+        'color-muted': 'var(--muted)',
+        'color-border': 'var(--border)',
+        'color-surface': 'var(--surface)',
+        'color-brand': 'var(--brand)',
+      }
+    }
+  }
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<style>
+:root{--ink:#18181b;--ink-soft:#3f3f46;--muted:#71717a;--border:#e4e4e7;--surface:#fafafa;--brand:#18181b}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{font-family:Inter,system-ui,-apple-system,sans-serif;color:var(--ink);background:#fff;margin:0;overflow-x:hidden}
+.display{font-family:Inter,system-ui,sans-serif;font-weight:800;letter-spacing:-.02em}
+.card-flush{background:#fff}
+.nav-glass{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(255,255,255,.85)}
+@media(prefers-color-scheme:dark){.nav-glass{background:rgba(24,24,27,.85)}}
+.scroll-row{scrollbar-width:none;-ms-overflow-style:none}
+.scroll-row::-webkit-scrollbar{display:none}
+.promo-strip{height:40px}
+.promo-item{display:none;align-items:center;padding:0 12px;height:40px;text-decoration:none}
+.promo-item.is-active{display:flex}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:100;align-items:center;justify-content:center;padding:16px}
+.modal-overlay.active{display:flex}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;padding:24px;position:relative;-webkit-overflow-scrolling:touch}
+.spinner{display:inline-block;width:20px;height:20px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ticket-card{padding:12px;border:1px solid var(--border);border-radius:12px;margin-bottom:8px;display:flex;align-items:center;gap:12px}
+.ticket-card img{width:80px;height:80px;border-radius:8px}
+.toast{position:fixed;bottom:20px;right:20px;padding:12px 20px;border-radius:10px;color:#fff;font-weight:500;font-size:.875rem;z-index:200;transform:translateY(100px);opacity:0;transition:all .3s;max-width:calc(100vw - 32px)}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{background:#16a34a}
+.toast.error{background:#dc2626}
+.payment-methods{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.payment-method{padding:12px;border:2px solid var(--border);border-radius:10px;cursor:pointer;text-align:center;font-weight:500;font-size:.875rem;transition:all .15s;min-height:44px;display:flex;align-items:center;justify-content:center}
+.payment-method.selected{border-color:var(--ink);background:var(--surface)}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:.875rem;font-weight:500;margin-bottom:4px}
+.form-group input{width:100%;padding:12px;border:1px solid var(--border);border-radius:8px;font-size:16px;-webkit-appearance:none;appearance:none}
+.form-group input:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 2px rgba(24,24,27,.1)}
+.close-btn{position:absolute;top:16px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:var(--muted)}
+.qty-btn{width:36px;height:36px;border-radius:9999px;border:1px solid var(--border);display:inline-flex;align-items:center;justify-content:center;font-size:1rem;background:#fff;touch-action:manipulation}
+@media (min-width:768px){.qty-btn{width:28px;height:28px}}
+
+/* ===== iOS / Android screen-fitting ===== */
+@media (max-width:767px){
+  /* Prevent iOS autozoom on inputs (font-size set to 16px above) */
+  /* Show ticket picker first on mobile via CSS order */
+  .content-grid-mobile{display:flex;flex-direction:column}
+  .ticket-picker-mobile{order:-1}
+  .event-info-mobile{order:1}
+  /* Full-width modal sheet on phones */
+  .modal-overlay{padding:8px;align-items:flex-end}
+  .modal{max-width:100%;border-radius:20px 20px 0 0;max-height:92vh;padding:24px 16px calc(24px + env(safe-area-inset-bottom))}
+}
+</style>
 </head>
-<body>
-  <header class="nav">
-    <div class="nav-left">
-      <a class="brand" href="/">campus<span>tickets</span></a>
-      <a class="nav-link" href="#tickets">Events</a>
-      <a class="nav-link" href="#about">About</a>
+<body class="min-h-screen">
+
+<div class="pb-24 md:pb-0">
+
+<!-- Header -->
+<header class="nav-glass sticky top-0 z-40 border-b border-[color:var(--border)]">
+  <div class="mx-auto max-w-7xl px-4 md:px-6">
+    <div class="flex h-14 items-center gap-3 md:h-16">
+      <a class="group flex flex-1 items-center gap-2.5 md:flex-none" href="/">
+        <svg viewBox="0 0 56 50" role="img" aria-label="Madfun" xmlns="http://www.w3.org/2000/svg" fill="none" class="h-10 w-auto shrink-0 transition group-hover:scale-105">
+          <path d="M51.06 37.1139C44.0551 49.3294 28.5434 53.6146 16.4171 46.6843C4.29075 39.7539 -4.5238 21.5759 2.48751 9.36039C9.49882 -2.85509 34.2995 -1.828 46.4271 5.10233C58.5547 12.0326 58.0596 24.9036 51.06 37.1139Z" fill="#FFD100"/>
+          <path d="M47.9692 16.0002C47.6138 12.5886 44.8669 10.7628 41.1764 11.1447L35.437 11.7176L36.8822 22.6363L31.3006 12.2092L31.0718 12.2324L27.4627 13.1189L23.6559 24.0299L22.4834 13.0892L19.4289 13.4066L16.5463 19.6324L12.3452 14.1434L9.29199 14.4608L10.4386 25.4621L13.8227 25.1099L13.5732 20.6066L16.1094 23.8711L17.7472 23.7008L19.7456 19.6544L20.2743 24.4389L23.6559 24.0879L33.0754 23.1086L36.9171 22.7086L42.3204 22.1473C46.0083 21.764 48.3247 19.4105 47.9692 16.0002Z" fill="#101820"/>
+          <path d="M15.4704 29.2529L15.6889 31.1303L20.8595 30.529L20.9422 33.7122L16.0754 34.5096L16.511 38.2451L12.3267 38.7303L10.8828 26.3432L20.9719 25.1729L21.339 28.3225L15.4704 29.2529Z" fill="#101820"/>
+          <path d="M46.6883 22.543L47.4703 34.9907L44.0151 35.2075L39.1379 30.0785L39.2749 35.5043L35.1785 35.7623L34.3965 23.3133L37.8517 23.0965L42.7638 28.2655L42.588 22.801L46.6883 22.543Z" fill="#101820"/>
+          <path d="M34.1942 30.828L33.7004 23.9893L29.5704 24.286L25.7597 24.5596L21.5586 24.8615L22.0524 31.7002C22.3225 35.4331 24.7204 37.4215 28.5479 37.1467C32.3755 36.8718 34.4644 34.5596 34.1942 30.828Z" fill="#101820"/>
+          <path d="M22.9707 26.1588L32.2997 25.5137L32.3256 27.0775C32.3256 27.0775 28.8522 29.3433 23.1271 27.613L22.9707 26.1588Z" fill="white"/>
+          <path d="M25.2067 33.1614C25.2067 33.1614 24.8292 31.6311 27.7131 31.9343C29.1764 32.0878 28.2082 33.4246 28.2082 33.4246C28.2082 33.4246 31.4566 31.8298 31.5251 33.0878C31.5936 34.4259 26.3701 36.6982 25.2067 33.1614Z" fill="#EA0029"/>
+          <path d="M31.0607 20.722C32.1014 20.2234 32.4572 18.8046 31.8555 17.5531C31.2537 16.3016 29.9222 15.6913 28.8815 16.1899C27.8407 16.6886 27.4849 18.1073 28.0867 19.3588C28.6885 20.6103 30.02 21.2206 31.0607 20.722Z" fill="white"/>
+          <path d="M30.2854 19.1242C31.0821 19.1242 31.728 18.4731 31.728 17.67C31.728 16.8669 31.0821 16.2158 30.2854 16.2158C29.4886 16.2158 28.8428 16.8669 28.8428 17.67C28.8428 18.4731 29.4886 19.1242 30.2854 19.1242Z" fill="#101820"/>
+          <path d="M29.7834 18.2539C30.0661 18.2539 30.2953 18.0372 30.2953 17.77C30.2953 17.5028 30.0661 17.2861 29.7834 17.2861C29.5007 17.2861 29.2715 17.5028 29.2715 17.77C29.2715 18.0372 29.5007 18.2539 29.7834 18.2539Z" fill="white"/>
+          <path d="M26.5417 11.4666L32.1582 11.3273L32.1763 10.6718L26.3193 9.91309L26.5417 11.4666Z" fill="#101820"/>
+        </svg>
+        <span class="leading-none">
+          <span class="block text-xl font-bold tracking-tight">Madfun</span>
+          <span class="mt-0.5 block text-[10px] font-medium tracking-wide text-[color:var(--muted)]">Events. Watch. Travel.</span>
+        </span>
+      </a>
+      <nav class="ml-6 hidden items-center gap-1 text-sm font-medium md:flex">
+        <a class="rounded-md px-3 py-2 transition bg-zinc-100 font-semibold text-[color:var(--ink)]" href="/">Events</a>
+        <a class="rounded-md px-3 py-2 transition hover:bg-zinc-100" href="#">Watch</a>
+      </nav>
+      <div class="hidden items-center gap-1 ml-auto md:flex">
+        <a class="inline-flex h-10 items-center rounded-full px-4 text-sm font-medium transition hover:bg-zinc-100" href="#">Sign in</a>
+        <a class="inline-flex h-10 items-center rounded-full px-4 text-sm font-semibold transition bg-[color:var(--ink)] text-white hover:bg-zinc-800" href="#">Get started</a>
+      </div>
     </div>
-    <div class="nav-right">
-      <input class="search" type="search" placeholder="Search events…" />
-      <button id="find-order-btn" class="btn ghost small">Find ticket</button>
-      <button class="btn primary small">Sign in</button>
+  </div>
+</header>
+
+<main class="overflow-x-clip">
+
+<!-- Hero -->
+<section class="relative">
+  <div class="md:mx-auto md:max-w-7xl md:px-6 md:pt-6">
+    <div class="relative aspect-[3/4] overflow-hidden md:aspect-[21/9] md:rounded-3xl">
+      <div class="absolute inset-0 bg-cover bg-center" style="background-image:url('https://madfun-assets.s3.af-south-1.amazonaws.com/events/ea108a1f-dcdf-400b-ac42-98cad86a0a71/images/20260821_c99a79dadd62.jpg')"></div>
+      <div class="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-black/10"></div>
+      <div class="absolute bottom-0 left-0 right-0 p-5 text-white md:p-10">
+        <div class="mb-2 text-xs font-semibold uppercase tracking-wider opacity-80">festival</div>
+        <h1 class="display mb-3 text-4xl md:text-6xl">University of Nairobi Freshers Night</h1>
+        <div class="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm opacity-90 md:text-base">
+          <span class="inline-flex items-center gap-1.5">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            Sat 18 Sept, 6:00 pm
+          </span>
+          <span class="inline-flex items-center gap-1.5">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            KICC, Nairobi
+          </span>
+          <span class="inline-flex items-center gap-1.5">
+            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            6:00 PM
+          </span>
+        </div>
+      </div>
     </div>
-  </header>
+  </div>
+</section>
 
-  <main class="page">
-    <header class="event-head reveal visible">
-      <span class="tag" id="ev-category">festival</span>
-      <h1 id="ev-title">University of Nairobi Freshers Night</h1>
-      <p class="event-meta">
-        <span>📅 <span id="ev-date"></span></span>
-        <span class="dot">·</span>
-        <span>📍 <strong id="ev-venue"></strong>, <span id="ev-city"></span></span>
-      </p>
-    </header>
+<!-- Content -->
+<div class="mx-auto max-w-7xl px-4 py-8 md:px-6">
+  <div class="grid gap-8 md:grid-cols-[1fr_340px] content-grid-mobile">
 
-    <div class="layout">
-      <section class="content" id="about">
-        <h2>About this event</h2>
-        <p id="ev-about"></p>
+    <!-- Left Column: Event Info -->
+    <div class="space-y-6 event-info-mobile">
+      <div class="card-flush rounded-2xl border border-[color:var(--border)] p-5 md:p-6">
+        <h2 class="mb-4 text-xl font-bold md:text-2xl">About This Event</h2>
+        <div class="prose prose-sm max-w-none text-sm leading-relaxed text-[color:var(--ink-soft)]">
+          <p class="mb-3">The University of Nairobi Students' Association (UNSA) proudly presents Freshers Night 2026 — the biggest welcome celebration for UoN's incoming class, live at the iconic Kenyatta International Convention Centre (KICC) on 18th September 2026, from 6:00 PM onwards.</p>
+          <p class="mb-3">This is more than a party — it's the official kickoff to campus life. Whether you're stepping onto UoN grounds for the very first time or you're a returning student ready to show the freshers what university nights are really about, this is where new friendships are made, new memories are created, and your university journey truly begins.</p>
+          <p class="mb-3">Expect a high-energy night packed with music, entertainment, surprise performances, and the kind of atmosphere only thousands of students in one room can create. From the moment you walk in, it's all about good music, great company, and celebrating the start of something new.</p>
+          <p class="mb-3 font-semibold">Event Highlights:</p>
+          <ul class="mb-4 list-disc pl-5 space-y-1">
+            <li>Live DJs and entertainment all night</li>
+            <li>Meet freshers and students from across all UoN campuses</li>
+            <li>Held at KICC — Nairobi's premier event venue</li>
+            <li>Officially ticketed by MADFUN for a safe, organized experience</li>
+          </ul>
+          <p class="mb-1 text-sm font-semibold">Date: 18th September 2026</p>
+          <p class="mb-1 text-sm font-semibold">Venue: KICC, Nairobi</p>
+          <p class="mb-1 text-sm font-semibold">Time: 6:00 PM onwards</p>
+          <p class="text-sm font-semibold">Tickets: Available via MADFUN</p>
+        </div>
+      </div>
 
-        <ul class="highlights" id="ev-highlights"></ul>
+      <div class="card-flush rounded-2xl border border-[color:var(--border)] p-5">
+        <h2 class="mb-4 text-xl font-bold md:text-2xl">Venue</h2>
+        <div class="card-flush rounded-2xl border border-[color:var(--border)] p-4">
+          <div class="text-sm font-semibold">KICC</div>
+          <div class="mt-0.5 text-xs text-[color:var(--muted)]">NAIROBI</div>
+        </div>
+      </div>
 
-        <h2>Venue</h2>
-        <div class="venue-card">
-          <p class="venue-name" id="ev-venue-name"></p>
-          <p class="venue-city" id="ev-venue-city"></p>
+      <div class="text-xs leading-relaxed text-[color:var(--muted)]">
+        <strong class="text-[color:var(--ink)]">Refunds</strong> — Full refund if the event is cancelled or rescheduled.
+      </div>
+    </div>
+
+    <!-- Right Column: Ticket Picker -->
+    <aside class="self-start md:sticky md:top-20 ticket-picker-mobile">
+      <div class="card-flush rounded-3xl border border-[color:var(--border)] bg-white p-4 shadow-xl shadow-zinc-900/5 md:p-5">
+        <div class="mb-1 flex items-baseline justify-between">
+          <div>
+            <div class="text-xs text-[color:var(--muted)]">From</div>
+            <div class="display text-3xl" id="minPrice">KSh 400</div>
+          </div>
         </div>
 
-        <h2>Refunds</h2>
-        <p class="refund-note" id="ev-refunds"></p>
-      </section>
-
-      <aside class="ticket-rail" id="tickets">
-        <div class="ticket-card">
-          <div class="from-row">
-            <span>From</span>
-            <strong id="from-price">KSh —</strong>
-          </div>
-
-          <p class="tickets-label">Tickets</p>
-
-          <div id="tier-rows"></div>
-
-          <div class="total-row">
-            <span>Total</span>
-            <strong id="cart-total">KSh 0</strong>
-          </div>
-
-          <button class="btn primary wide" id="checkout-btn">Select tickets</button>
-          <p class="pay-methods">Mobile Money · Card</p>
+        <div class="mb-2 mt-4 text-xs font-bold uppercase tracking-wider text-[color:var(--muted)]">Tickets</div>
+        <div class="space-y-1.5" id="ticketList">
+          <div class="text-sm text-[color:var(--muted)] text-center py-4">Loading tickets...</div>
         </div>
-      </aside>
-    </div>
-  </main>
 
-  <footer class="footer">
-    <div class="footer-cols">
-      <div><h4>Discover</h4><a href="#">Events</a><a href="#">Live now</a></div>
-      <div><h4>Organisers</h4><a href="#">List an event</a></div>
-      <div><h4>Help</h4><a href="#" id="find-order-btn2">Support</a><a href="#refunds">Refunds</a></div>
-      <div><h4>Company</h4><a href="#">Privacy</a><a href="#">Terms</a></div>
-    </div>
-    <p class="copyright">campustickets — original demo code &amp; content · © 2026</p>
-  </footer>
+        <div id="summarySection" class="mt-4 hidden">
+          <div class="border-t border-[color:var(--border)] pt-4 space-y-1">
+            <div class="flex justify-between text-base font-bold"><span>Total</span><span id="total">KSh 0</span></div>
+          </div>
+        </div>
 
-  <dialog id="checkout-modal">
-    <form class="modal-inner" id="checkout-form">
-      <h3>Checkout</h3>
-      <div class="field"><label>Name</label><input type="text" name="name" required placeholder="Full name" /></div>
-      <div class="field"><label>Email</label><input type="email" name="email" required placeholder="you@example.com" /></div>
-      <div class="field"><label>Phone</label><input type="tel" name="phone" required placeholder="+254 7XX XXX XXX" /></div>
-      <div class="field">
-        <label>Payment method</label>
-        <select name="paymentMethod">
-          <option value="mobile-money">Mobile Money</option>
-          <option value="card">Card</option>
-        </select>
+        <button class="mt-4 w-full rounded-full bg-[color:var(--ink)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:opacity-40 disabled:cursor-not-allowed" id="checkoutBtn" disabled onclick="openCheckout()">
+          Get Tickets
+        </button>
       </div>
-      <p class="error" id="checkout-error" hidden></p>
-      <div class="modal-actions">
-        <button type="button" class="btn ghost" id="checkout-cancel">Back</button>
-        <button type="submit" class="btn primary" id="checkout-pay">Pay now</button>
+    </aside>
+
+  </div>
+</div>
+
+</main>
+</div>
+
+<!-- Checkout Modal -->
+<div class="modal-overlay" id="checkoutModal">
+  <div class="modal">
+    <button class="close-btn" onclick="closeModal('checkoutModal')">&times;</button>
+    <h2 class="text-xl font-bold mb-4">Checkout</h2>
+    <div id="checkoutSummary"></div>
+    <div class="mt-4">
+      <div class="form-group">
+        <label>Full Name</label>
+        <input type="text" id="custName" placeholder="John Doe" required>
       </div>
-    </form>
-  </dialog>
-
-  <dialog id="ticket-modal">
-    <div class="modal-inner confirm">
-      <h3>You're in! 🎉</h3>
-      <p class="confirm-sub">Show this QR code at the gate.</p>
-      <img id="ticket-qr" alt="Ticket QR code" />
-      <p class="confirm-ref" id="ticket-ref"></p>
-      <div id="ticket-summary"></div>
-      <button class="btn primary wide" id="ticket-close">Done</button>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" id="custEmail" placeholder="john@example.com" required>
+      </div>
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="tel" id="custPhone" placeholder="0712345678" required>
+      </div>
+      <button class="w-full rounded-full bg-[color:var(--ink)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:opacity-40" onclick="submitOrder()" id="submitOrderBtn">Continue to Payment</button>
     </div>
-  </dialog>
+  </div>
+</div>
 
-  <script src="/app.js"></script>
+<!-- Payment Modal -->
+<div class="modal-overlay" id="paymentModal">
+  <div class="modal">
+    <button class="close-btn" onclick="closeModal('paymentModal')">&times;</button>
+    <h2 class="text-xl font-bold mb-4">Payment</h2>
+    <div id="paymentOrderInfo"></div>
+    <div class="payment-methods mt-4">
+      <div class="payment-method selected" onclick="selectPayment('mpesa')" id="payMpesa">M-Pesa</div>
+      <div class="payment-method" onclick="selectPayment('card')" id="payCard">Card</div>
+    </div>
+    <div id="mpesaForm">
+      <div class="form-group">
+        <label>M-Pesa Phone Number</label>
+        <input type="tel" id="mpesaPhone" placeholder="254712345678" value="254">
+      </div>
+    </div>
+    <button class="w-full rounded-full bg-[color:var(--ink)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:opacity-40" onclick="processPayment()" id="payBtn">Pay Now</button>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal-overlay" id="successModal">
+  <div class="modal text-center">
+    <button class="close-btn" onclick="closeModal('successModal')">&times;</button>
+    <div class="text-5xl mb-3">🎉</div>
+    <h2 class="text-xl font-bold mb-2">Payment Successful!</h2>
+    <p class="text-sm text-[color:var(--muted)] mb-4">Your tickets have been confirmed.</p>
+    <div id="successOrderInfo"></div>
+    <button class="mt-4 w-full rounded-full bg-[color:var(--ink)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800" onclick="closeModal('successModal')">Done</button>
+    <button class="mt-2 w-full rounded-full border border-[color:var(--ink)] px-6 py-3 text-sm font-semibold text-[color:var(--ink)] transition hover:bg-zinc-100" onclick="downloadTickets()">Download Tickets</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+const API = '/api';
+const EVENT_ID = 'b1011a';
+let eventData = null;
+let cart = {};
+let selectedPayment = 'mpesa';
+let currentOrder = null;
+
+async function apiFetch(path, opts = {}) {
+  const res = await fetch(API + path, { ...opts, headers: { 'Content-Type': 'application/json', ...opts.headers }, credentials: 'include' });
+  const text = await res.text();
+  let data;
+  try { data = text ? JSON.parse(text) : {}; } catch { throw new Error('Invalid server response'); }
+  if (!res.ok) throw new Error(data.error || 'Request failed');
+  return data;
+}
+
+function showToast(msg, type = 'error') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.classList.remove('show'), 4000);
+}
+
+function openModal(id) { document.getElementById(id).classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+async function loadEvent() {
+  try {
+    eventData = await apiFetch('/events/' + EVENT_ID);
+    renderTickets();
+  } catch (e) {
+    document.getElementById('ticketList').innerHTML = '<div class="text-sm text-[color:var(--muted)] text-center py-4">Failed to load tickets. Please refresh.</div>';
+    showToast('Failed to load event: ' + e.message);
+  }
+}
+
+function renderTickets() {
+  if (!eventData || !eventData.ticketTypes) return;
+  const list = document.getElementById('ticketList');
+  const minPrice = Math.min(...eventData.ticketTypes.map(t => Number(t.price)));
+  document.getElementById('minPrice').textContent = 'KSh ' + minPrice.toLocaleString();
+
+  const order = ['student', 'regular', 'vip', 'vvip', 'group'];
+  const sortedTypes = [...eventData.ticketTypes].sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+
+  list.innerHTML = sortedTypes.map(t => {
+    const qty = cart[t.id] || 0;
+    const remaining = Number(t.quantity) - Number(t.sold);
+    const soldOut = remaining <= 0;
+    return `
+      <div class="flex items-center gap-3 rounded-xl border px-3 py-2.5 border-[color:var(--border)]">
+        <div class="min-w-0 flex-1">
+          <div class="flex items-baseline justify-between gap-2">
+            <span class="flex min-w-0 items-center gap-1.5">
+              <span class="truncate text-sm font-semibold leading-tight">${escHtml(t.name)}</span>
+            </span>
+            <span class="shrink-0 text-sm font-bold">${soldOut ? 'Sold out' : 'KSh ' + Number(t.price).toLocaleString()}</span>
+          </div>
+        </div>
+        <div class="flex shrink-0 items-center gap-2">
+          <button aria-label="Decrease ${escHtml(t.name)}" class="qty-btn inline-flex items-center justify-center rounded-full border border-[color:var(--border)] text-sm transition hover:border-[color:var(--ink)] disabled:opacity-40 disabled:cursor-not-allowed" onclick="changeQty('${escHtml(t.id)}',-1)" ${(qty === 0 || soldOut) ? 'disabled' : ''}>−</button>
+          <span class="w-5 text-center text-sm font-semibold">${qty}</span>
+          <button aria-label="Increase ${escHtml(t.name)}" class="qty-btn inline-flex items-center justify-center rounded-full border border-[color:var(--border)] text-sm transition hover:border-[color:var(--ink)] disabled:opacity-40 disabled:cursor-not-allowed" onclick="changeQty('${escHtml(t.id)}',1)" ${soldOut ? 'disabled' : ''}>+</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function changeQty(typeId, delta) {
+  const tt = eventData.ticketTypes.find(t => t.id === typeId);
+  if (!tt) return;
+  const remaining = Number(tt.quantity) - Number(tt.sold);
+  const current = cart[typeId] || 0;
+  const next = Math.max(0, Math.min(Number(tt.max_per_order), remaining, current + delta));
+  if (next === 0) delete cart[typeId]; else cart[typeId] = next;
+  renderTickets();
+  updateSummary();
+}
+
+function updateSummary() {
+  const items = getCartItems();
+  const summaryEl = document.getElementById('summarySection');
+  const btn = document.getElementById('checkoutBtn');
+  if (items.length === 0) {
+    summaryEl.classList.add('hidden');
+    btn.disabled = true;
+    btn.textContent = 'Get Tickets';
+    return;
+  }
+  const total = items.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
+  document.getElementById('total').textContent = 'KSh ' + total.toLocaleString();
+  summaryEl.classList.remove('hidden');
+  btn.disabled = false;
+  const count = items.reduce((s, i) => s + i.quantity, 0);
+  btn.textContent = 'Get ' + count + ' Ticket' + (count > 1 ? 's' : '');
+}
+
+function getCartItems() {
+  const order = ['student', 'regular', 'vip', 'vvip', 'group'];
+  return Object.entries(cart)
+    .map(([id, qty]) => {
+      const tt = eventData.ticketTypes.find(t => t.id === id);
+      return { typeId: id, name: tt.name, unitPrice: Number(tt.price), quantity: qty };
+    })
+    .filter(i => i.quantity > 0)
+    .sort((a, b) => order.indexOf(a.typeId) - order.indexOf(b.typeId));
+}
+
+function openCheckout() {
+  const items = getCartItems();
+  if (items.length === 0) return;
+  const html = items.map(i => '<div class="flex justify-between py-2 border-b border-[color:var(--border)] text-sm"><span>' + i.quantity + 'x ' + escHtml(i.name) + '</span><span class="font-semibold">KSh ' + (i.unitPrice * i.quantity).toLocaleString() + '</span></div>').join('');
+  const total = items.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
+  document.getElementById('checkoutSummary').innerHTML = html +
+    '<div class="flex justify-between py-2 text-base font-bold mt-2"><span>Total</span><span>KSh ' + total.toLocaleString() + '</span></div>';
+  openModal('checkoutModal');
+}
+
+async function submitOrder() {
+  const name = document.getElementById('custName').value.trim();
+  const email = document.getElementById('custEmail').value.trim();
+  const phone = document.getElementById('custPhone').value.trim();
+  if (!name || !email || !phone) { showToast('Please fill in all fields'); return; }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('Please enter a valid email'); return; }
+  const btn = document.getElementById('submitOrderBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
+  try {
+    const items = getCartItems().map(i => ({ typeId: i.typeId, quantity: i.quantity }));
+    const result = await apiFetch('/checkout/initiate', { method: 'POST', body: JSON.stringify({ eventId: EVENT_ID, tickets: items, customer: { name, email, phone } }) });
+    currentOrder = result;
+    closeModal('checkoutModal');
+    showPayment(result);
+  } catch (e) { showToast('Checkout failed: ' + e.message); }
+  finally { btn.disabled = false; btn.textContent = 'Continue to Payment'; }
+}
+
+function showPayment(order) {
+  document.getElementById('paymentOrderInfo').innerHTML =
+    '<div class="p-3 rounded-xl bg-[color:var(--surface)] text-sm mb-2">' +
+    '<div class="flex justify-between"><span>Order</span><span class="font-semibold">' + escHtml(order.orderNumber) + '</span></div>' +
+    '<div class="flex justify-between mt-1"><span>Total</span><span class="font-bold">KSh ' + Number(order.total).toLocaleString() + '</span></div></div>';
+  openModal('paymentModal');
+}
+
+function selectPayment(method) {
+  selectedPayment = method;
+  document.getElementById('payMpesa').className = 'payment-method' + (method === 'mpesa' ? ' selected' : '');
+  document.getElementById('payCard').className = 'payment-method' + (method === 'card' ? ' selected' : '');
+  document.getElementById('mpesaForm').style.display = method === 'mpesa' ? 'block' : 'none';
+}
+
+async function processPayment() {
+  const btn = document.getElementById('payBtn');
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Processing...';
+  try {
+    if (selectedPayment === 'mpesa') {
+      let phone = document.getElementById('mpesaPhone').value.trim().replace(/[^0-9]/g, '');
+      if (/^07\d{8}$/.test(phone)) phone = '254' + phone.slice(1);
+      if (!/^254\d{9}$/.test(phone)) { showToast('Enter a valid phone number (254XXXXXXXXX or 07XXXXXXXX)'); btn.disabled = false; btn.textContent = 'Pay Now'; return; }
+      await apiFetch('/payments/mpesa', { method: 'POST', body: JSON.stringify({ sessionId: currentOrder.sessionId, phoneNumber: phone }) });
+      btn.disabled = true;
+      btn.textContent = 'Order submitted. Awaiting confirmation.';
+      document.getElementById('paymentModal').querySelector('.modal').innerHTML =
+        '<button class="close-btn" onclick="closeModal(\'paymentModal\')">&times;</button>' +
+        '<h2 class="text-xl font-bold mb-3">Order received</h2>' +
+        '<p class="text-sm text-[color:var(--muted)] mb-2">Your order <strong>' + escHtml(currentOrder.orderNumber) + '</strong> for <strong>KSh ' + Number(currentOrder.total).toLocaleString() + '</strong> has been received.</p>' +
+        '<p class="text-sm text-[color:var(--muted)] mb-2">Please complete payment via M-Pesa to <strong>0085060049062</strong> using the phone number ' + escHtml(phone) + '.</p>' +
+        '<p class="text-sm text-[color:var(--muted)]">Once our team confirms your payment, your tickets will be issued on this page. You may check back shortly.</p>';
+    } else { showToast('Card payments coming soon!'); btn.disabled = false; btn.textContent = 'Pay Now'; }
+  } catch (e) { showToast('Payment failed: ' + e.message); btn.disabled = false; btn.textContent = 'Pay Now'; }
+}
+
+async function showSuccess() {
+  try {
+    const order = await apiFetch('/orders/' + currentOrder.orderId);
+    let ticketsHtml = '';
+    if (order.tickets && order.tickets.length) {
+      ticketsHtml = '<div class="mt-4 space-y-2">' + order.tickets.map(t =>
+        '<div class="ticket-card">' +
+        (t.qr_code ? '<img src="' + t.qr_code + '" alt="QR">' : '<div class="w-20 h-20 bg-zinc-100 rounded-lg flex items-center justify-center text-[color:var(--muted)] text-xs">QR</div>') +
+        '<div><div class="text-sm font-semibold">' + escHtml(t.ticket_type) + '</div><div class="text-xs text-[color:var(--muted)]">' + escHtml(t.id ? t.id.substring(0,8) + '...' : '') + '</div></div></div>'
+      ).join('') + '</div>';
+    }
+    document.getElementById('successOrderInfo').innerHTML =
+      '<div class="text-left p-3 rounded-xl bg-[color:var(--surface)] text-sm">' +
+      '<div class="flex justify-between"><span>Order</span><span class="font-semibold">' + escHtml(order.orderNumber || currentOrder.orderNumber) + '</span></div>' +
+      '<div class="flex justify-between mt-1"><span>Total</span><span class="font-bold">KSh ' + Number(order.total || currentOrder.total).toLocaleString() + '</span></div></div>' + ticketsHtml;
+  } catch (e) {
+    document.getElementById('successOrderInfo').innerHTML = '<div class="p-3 rounded-xl bg-[color:var(--surface)] text-sm text-left"><div class="font-semibold">Order: ' + escHtml(currentOrder.orderNumber) + '</div><div>Check your email for tickets.</div></div>';
+  }
+  openModal('successModal');
+  cart = {}; updateSummary(); renderTickets();
+}
+
+function ticketQrDataUrl(text) {
+  try {
+    if (typeof qrcode !== 'function') return null;
+    var qr = qrcode(0, 'M');
+    qr.addData(String(text));
+    qr.make();
+    return qr.createDataURL(8, 0);
+  } catch (e) { console.warn('QR generation failed', e); return null; }
+}
+
+async function downloadTickets() {
+  try {
+    const order = await apiFetch('/orders/' + currentOrder.orderId);
+    if (order.paymentStatus !== 'paid') { showToast('Tickets are available once payment is confirmed.'); return; }
+    buildTicketDoc(order, buildQrMap(order));
+  } catch (e) { showToast('Could not load tickets: ' + e.message); }
+}
+
+function buildQrMap(order) {
+  const map = {};
+  (order.tickets || []).forEach(t => {
+    const url = ticketQrDataUrl('TICKET|' + t.id + '|' + (order.orderNumber || ''));
+    map[t.id] = url;
+  });
+  return map;
+}
+
+function buildTicketDoc(order, qrMap) {
+  const tickets = order.tickets || [];
+  const items = order.items || [];
+  const total = Number(order.total || 0).toLocaleString();
+  const tix = tickets.length ? tickets : items.map(it => ({ id: (order.orderNumber || '') + '-' + (it.ticket_type_id || it.name), ticket_type: it.name, _qty: it.quantity }));
+  const cards = tix.map(t => {
+    const qr = t.id && qrMap[t.id];
+    return '' +
+      '<div class="ticket">' +
+        '<div class="tk-head"><span>' + escHtml(order.eventName || 'Event') + '</span><span class="badge">' + escHtml(t.ticket_type || 'Ticket') + '</span></div>' +
+        '<div class="tk-body">' +
+          '<div class="tk-qr">' + (qr ? '<img src="' + qr + '" alt="QR"/>' : '<div class="noqr">NO QR</div>') + '</div>' +
+          '<div class="tk-info">' +
+            '<div class="tk-row"><span>Order</span><b>' + escHtml(order.orderNumber || '') + '</b></div>' +
+            '<div class="tk-row"><span>Customer</span><b>' + escHtml((order.customer && order.customer.name) || '') + '</b></div>' +
+            '<div class="tk-row"><span>Date</span><b>' + escHtml(order.eventDate || '') + '</b></div>' +
+            '<div class="tk-row"><span>Venue</span><b>' + escHtml(order.venue || '') + '</b></div>' +
+            '<div class="tk-row"><span>Ticket ID</span><b class="tkid">' + escHtml((t.id || '').substring(0, 14)) + '</b></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="tk-foot">Admit one · ' + escHtml((order.customer && order.customer.name) || 'Holder') + '</div>' +
+      '</div>';
+  }).join('');
+
+  const html = '<!DOCTYPE html><html><head><meta charset="utf-8"><title>Your Tickets</title>' +
+    '<style>' +
+      'body{font-family:Arial,Helvetica,sans-serif;background:#e5e7eb;margin:0;padding:32px;color:#111}' +
+      '.sheet{max-width:720px;margin:0 auto}' +
+      '.title{text-align:center;margin-bottom:16px}' +
+      '.title h1{font-size:20px;margin:0}' +
+      '.title p{color:#555;margin:4px 0}' +
+      '.ticket{background:#fff;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.12);margin-bottom:20px;overflow:hidden;border:1px solid #e5e7eb}' +
+      '.tk-head{display:flex;justify-content:space-between;align-items:center;background:#111;color:#fff;padding:12px 20px;font-weight:700;font-size:15px}' +
+      '.tk-head .badge{background:#ffd100;color:#111;border-radius:999px;padding:3px 12px;font-size:12px}' +
+      '.tk-body{display:flex;gap:20px;padding:20px}' +
+      '.tk-qr{flex:0 0 120px;width:120px;height:120px}' +
+      '.tk-qr img{width:120px;height:120px;image-rendering:pixelated}' +
+      '.tk-qr .noqr{width:120px;height:120px;display:flex;align-items:center;justify-content:center;background:#f3f4f6;color:#9ca3af;font-size:11px;border-radius:8px}' +
+      '.tk-info{flex:1}' +
+      '.tk-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px dashed #e5e7eb;font-size:13px}' +
+      '.tk-row span{color:#6b7280}' +
+      '.tk-row b{font-weight:700}' +
+      '.tk-row .tkid{font-family:monospace;font-size:11px;color:#374151}' +
+      '.tk-foot{background:#f9fafb;padding:10px 20px;font-size:12px;color:#6b7280}' +
+      '@media print{' +
+        'body{background:#fff;padding:0}' +
+        '.ticket{box-shadow:none;break-inside:avoid}' +
+        '.no-print{display:none}' +
+      '}' +
+      '.no-print{text-align:center;margin:16px 0 8px}' +
+      '.no-print button{background:#111;color:#fff;border:0;border-radius:999px;padding:10px 24px;font-size:14px;margin:0 4px;cursor:pointer}' +
+    '</style></head><body>' +
+    '<div class="no-print">' +
+      '<button onclick="window.print()">Print / Save as PDF</button>' +
+      '<button onclick="window.close()">Close</button>' +
+    '</div>' +
+    '<div class="sheet">' +
+      '<div class="title"><h1>Madfun · University of Nairobi Freshers Night</h1>' +
+      '<p>Order ' + escHtml(order.orderNumber || '') + ' · ' + tickets.length + ' ticket(s) · Total KSh ' + total + '</p></div>' +
+      cards +
+    '</div>' +
+    '<script>setTimeout(function(){window.print();},500);<\/script>' +
+    '</body></html>';
+
+  const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'tickets-' + (order.orderNumber || 'order') + '.html';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 4000);
+}
+
+function escHtml(s) {
+  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+loadEvent();
+</script>
 </body>
 </html>
