@@ -348,7 +348,7 @@ function changeQty(typeId, delta) {
   if (!tt) return;
   const remaining = Number(tt.quantity) - Number(tt.sold);
   const current = cart[typeId] || 0;
-  const next = Math.max(0, Math.min(Number(tt.max_per_order), remaining, current + delta));
+  const next = Math.max(0, Math.min(Number(tt.maxPerOrder), remaining, current + delta));
   if (next === 0) delete cart[typeId]; else cart[typeId] = next;
   renderTickets();
   updateSummary();
