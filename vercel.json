@@ -3,6 +3,7 @@
   "installCommand": "npm install",
   "framework": null,
   "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index" },
     { "source": "/(.*)", "destination": "/public/index.html" }
   ]
 }
