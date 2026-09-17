@@ -43,23 +43,7 @@
 </script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎫</text></svg>"/>
 
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-tailwind.config = {
-  theme: {
-    extend: {
-      colors: {
-        'color-ink': 'var(--ink)',
-        'color-ink-soft': 'var(--ink-soft)',
-        'color-muted': 'var(--muted)',
-        'color-border': 'var(--border)',
-        'color-surface': 'var(--surface)',
-        'color-brand': 'var(--brand)',
-      }
-    }
-  }
-}
-</script>
+<link rel="stylesheet" href="/tailwind.css">
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 <style>
 :root{--ink:#18181b;--ink-soft:#3f3f46;--muted:#71717a;--border:#e4e4e7;--surface:#fafafa;--brand:#18181b}
@@ -773,11 +757,11 @@ function buildTicketDoc(order, qrMap) {
 
 function escHtml(s) {
   return String(s == null ? '' : s)
-    .replace(/&/g, '&')
-    .replace(/</g, '<')
-    .replace(/>/g, '>')
-    .replace(/"/g, '"')
-    .replace(/'/g, ''');
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 // Immediate render
