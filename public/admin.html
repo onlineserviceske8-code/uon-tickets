@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="robots" content="noindex"/>
+<title>Admin - Madfun Tickets</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<style>
+:root{--ink:#18181b;--ink-soft:#3f3f46;--muted:#71717a;--border:#e4e4e7;--surface:#fafafa;--brand:#18181b}
+body{font-family:Inter,system-ui,-apple-system,sans-serif;color:var(--ink);background:#f4f4f5;margin:0}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:9999px;font-size:11px;font-weight:600}
+.badge-paid{background:#dcfce7;color:#166534}
+.badge-pending{background:#fef3c7;color:#92400e}
+.badge-failed{background:#fee2e2;color:#991b1b}
+.badge-confirmed{background:#dbeafe;color:#1e40af}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid #fff;border-top-color:transparent;border-radius:50%;animation:spin .6s linear infinite}
+.spinner.dark{border-color:var(--ink);border-top-color:transparent}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;bottom:20px;right:20px;padding:12px 20px;border-radius:10px;color:#fff;font-weight:500;font-size:.875rem;z-index:200;transform:translateY(100px);opacity:0;transition:all .3s;max-width:calc(100vw - 32px)}
+.toast.show{transform:translateY(0);opacity:1}
+.toast.success{background:#16a34a}
+.toast.error{background:#dc2626}
+.table-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:12px;background:#fff}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:860px}
+th,td{padding:10px 14px;text-align:left;border-bottom:1px solid #f0f0f2;vertical-align:top;white-space:nowrap}
+th{background:#fafafa;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);position:sticky;top:0}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#fafafa}
+.btn{display:inline-flex;align-items:center;gap:6px;border:0;border-radius:9999px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;transition:opacity .15s}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-yellow{background:#ffd100;color:var(--ink)}
+.btn-ghost{background:#fff;border:1px solid var(--border);color:var(--ink)}
+.btn-green{background:#16a34a;color:#fff}
+.section{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:16px}
+</style>
+</head>
+<body>
+
+<div id="loginGate" class="min-h-screen flex items-center justify-center p-4">
+  <div class="section w-full max-w-sm">
+    <div class="text-center mb-4">
+      <div class="text-2xl font-extrabold tracking-tight">🛡️ { MADFUN ADMIN }</div>
+      <p class="text-sm text-[color:var(--muted)] mt-1">Orders · Payments · Tickets</p>
+    </div>
+    <div class="space-y-3">
+      <input type="password" id="adminTokenInput" placeholder="Enter admin token" class="w-full px-4 py-3 rounded-xl border border-[color:var(--border)] text-sm" onkeydown="if(event.key==='Enter')login()">
+      <button class="btn btn-dark w-full justify-center py-3" onclick="login()" id="loginBtn">Sign in</button>
+    </div>
+    <p class="text-xs text-[color:var(--muted)] text-center mt-4">Set the ADMIN_TOKEN environment variable to enable.</p>
+  </div>
+</div>
+
+<div id="dashboard" class="hidden">
+  <header class="bg-white border-b border-[color:var(--border)] sticky top-0 z-30">
+    <div class="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between gap-3 flex-wrap">
+      <div>
+        <div class="text-xl font-extrabold tracking-tight">🛡️ { MADFUN ADMIN }</div>
+        <div class="text-xs text-[color:var(--muted)]">Freshers Night 2026 · KICC Nairobi</div>
+      </div>
+      <div class="flex items-center gap-2 flex-wrap">
+        <button class="btn btn-ghost" onclick="loadOrders()" id="refreshBtn">↻ Refresh</button>
+        <button class="btn btn-yellow" onclick="resendToAllPaid()" id="resendAllBtn">📧 Send Tickets to All Paid</button>
+        <button class="btn btn-ghost" onclick="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-7xl px-4 py-6 space-y-6">
+
+    <div id="statsRow" class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <div class="stat-card"><div class="text-xs text-[color:var(--muted)] font-semibold uppercase">Total Orders</div><div class="text-2xl font-extrabold" id="stTotal">-</div></div>
+      <div class="stat-card"><div class="text-xs text-green-700 font-semibold uppercase">Paid</div><div class="text-2xl font-extrabold text-green-700" id="stPaid">-</div></div>
+      <div class="stat-card"><div class="text-xs text-amber-700 font-semibold uppercase">Pending</div><div class="text-2xl font-extrabold text-amber-700" id="stPending">-</div></div>
+      <div class="stat-card"><div class="text-xs text-[color:var(--muted)] font-semibold uppercase">Revenue (Paid)</div><div class="text-2xl font-extrabold" id="stRevenue">-</div></div>
+    </div>
+
+    <div class="section">
+      <div class="flex items-center justify-between gap-3 flex-wrap mb-4">
+        <div class="flex gap-2 flex-wrap">
+          <button class="btn btn-dark" data-filter="" onclick="setFilter('')">All</button>
+          <button class="btn btn-ghost" data-filter="pending" onclick="setFilter('pending')">Pending</button>
+          <button class="btn btn-ghost" data-filter="paid" onclick="setFilter('paid')">Paid</button>
+        </div>
+        <div class="text-xs text-[color:var(--muted)]">Last updated: <span id="lastUpdated">-</span></div>
+      </div>
+      <div id="ordersTable" class="table-wrap">
+        <div class="text-center text-sm text-[color:var(--muted)] py-10">Loading orders…</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const API = '/api';
+let adminToken = localStorage.getItem('madfun_admin_token') || '';
+let orders = [];
+let currentFilter = '';
+
+function escHtml(s) {
+  return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+function showToast(msg, type) { const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast ' + (type||'error') + ' show'; setTimeout(()=>t.classList.remove('show'),4000); }
+
+async function apiFetch(path, opts = {}) {
+  const res = await fetch(API + path, { ...opts, headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + adminToken, ...opts.headers }, credentials: 'omit' });
+  const text = await res.text();
+  let data; try { data = text ? JSON.parse(text) : {}; } catch { data = { raw: text }; }
+  if (res.status === 401) return { unauthorized: true };
+  if (!res.ok) throw new Error(data.error || 'Request failed (' + res.status + ')');
+  return data;
+}
+
+function login() {
+  const token = document.getElementById('adminTokenInput').value.trim();
+  if (!token) { showToast('Enter the admin token'); return; }
+  adminToken = token;
+  localStorage.setItem('madfun_admin_token', token);
+  document.getElementById('loginBtn').innerHTML = '<span class="spinner"></span>';
+  initDashboard();
+}
+
+function logout() {
+  adminToken = ''; localStorage.removeItem('madfun_admin_token');
+  document.getElementById('loginGate').classList.remove('hidden');
+  document.getElementById('dashboard').classList.add('hidden');
+}
+
+async function initDashboard() {
+  await loadOrders();
+  if (document.getElementById('dashboard').classList.contains('hidden')) {
+    document.getElementById('loginGate').classList.add('hidden');
+    document.getElementById('dashboard').classList.remove('hidden');
+  }
+  document.getElementById('loginBtn').innerHTML = 'Sign in';
+  setInterval(loadOrders, 15000);
+}
+
+function ticketQrDataUrl(text) {
+  try { if (typeof qrcode !== 'function') return null; const qr = qrcode(0,'M'); qr.addData(String(text)); qr.make(); return qr.createDataURL(6,0); } catch(e) { return null; }
+}
+
+function itemsLabel(order) {
+  return (order.items || []).map(i => escHtml(i.quantity) + 'x ' + escHtml(i.name));
+}
+
+function fmtDate(d) { return d ? new Date(d).toLocaleString('en-KE', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }) : '-'; }
+
+function setFilter(f) {
+  currentFilter = f;
+  document.querySelectorAll('[data-filter]').forEach(b => {
+    if (b.dataset.filter === f) { b.className = 'btn btn-dark'; } else { b.className = 'btn btn-ghost'; }
+  });
+  renderTable();
+}
+
+function renderTable() {
+  const wrap = document.getElementById('ordersTable');
+  const filtered = currentFilter ? orders.filter(o => o.paymentStatus === currentFilter) : orders;
+
+  if (!filtered.length) { wrap.innerHTML = '<div class="text-center text-sm text-[color:var(--muted)] py-10">No orders found.</div>'; return; }
+
+  const rows = filtered.map(o => {
+    const paid = o.paymentStatus === 'paid';
+    const pending = o.paymentStatus === 'pending' || o.paymentStatus === 'pending_stk';
+    const confirmed = o.status === 'confirmed';
+    const statusBadge = paid ? '<span class="badge badge-paid">Paid</span>' : (pending ? '<span class="badge badge-pending">Pending</span>' : '<span class="badge badge-failed">' + escHtml(o.paymentStatus || 'unknown') + '</span>');
+    const qrForList = (o.tickets && o.tickets[0]) ? ticketQrDataUrl('TICKET|' + o.tickets[0].id + '|' + o.orderNumber) : null;
+    return '<tr>' +
+      '<td><div class="font-bold">' + escHtml(o.orderNumber) + '</div><div class="text-xs text-[color:var(--muted)]">' + fmtDate(o.createdAt) + '</div></td>' +
+      '<td><div class="font-semibold">' + escHtml((o.customer && o.customer.name) || '-') + '</div><div class="text-xs text-[color:var(--muted)]">' + escHtml((o.customer && o.customer.email) || '-') + '</div><div class="text-xs text-[color:var(--muted)]">' + escHtml((o.customer && o.customer.phone) || '-') + '</div></td>' +
+      '<td>' + (itemsLabel(o).join('<br>') || '-') + '</td>' +
+      '<td class="font-bold">KSh ' + Number(o.total || 0).toLocaleString() + '</td>' +
+      '<td>' + statusBadge + (confirmed ? ' <span class="badge badge-confirmed">Confirmed</span>' : '') + '</td>' +
+      '<td class="text-xs text-[color:var(--muted)]">' + (o.paidAt ? fmtDate(o.paidAt) : '-') + '</td>' +
+      '<td>' +
+        (!paid ? '<button class="btn btn-green mb-1" onclick="confirmOrder(\'' + escHtml(o.id) + '\')">✓ Confirm</button><br>' : '') +
+        (paid && o.tickets && o.tickets.length ? '<button class="btn btn-yellow mb-1" onclick="resendOrder(\'' + escHtml(o.id) + '\')">📧 Resend Tickets</button>' : (pending ? '<span class="text-xs text-[color:var(--muted)]">Awaiting payment</span>' : '')) +
+        (qrForList ? '<div class="mt-1"><img src="' + qrForList + '" class="inline-block w-10 h-10" style="image-rendering:pixelated" title="First ticket QR"></div>' : '') +
+      '</td>' +
+      '</tr>';
+  }).join('');
+
+  wrap.innerHTML = '<table><thead><tr>' +
+    '<th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Payment</th><th>Paid At</th><th>Actions</th>' +
+    '</tr></thead><tbody>' + rows + '</tbody></table>';
+}
+
+async function loadOrders() {
+  const btn = document.getElementById('refreshBtn');
+  const old = btn.innerHTML; btn.disabled = true; btn.innerHTML = '<span class="spinner dark"></span>';
+  try {
+    const data = await apiFetch('/admin/orders?status=' + (currentFilter || 'all'));
+    if (data.unauthorized) { showToast('Invalid admin token'); logout(); return; }
+    orders = data.orders || [];
+    document.getElementById('stTotal').textContent = data.total ?? orders.length;
+    document.getElementById('stPaid').textContent = data.paid ?? orders.filter(o=>o.paymentStatus==='paid').length;
+    document.getElementById('stPending').textContent = data.pending ?? orders.filter(o=>o.paymentStatus!=='paid').length;
+    document.getElementById('stRevenue').textContent = 'KSh ' + Number(data.revenue || 0).toLocaleString();
+    document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
+    renderTable();
+  } catch (e) { showToast('Failed to load orders: ' + e.message); }
+  finally { btn.disabled = false; btn.innerHTML = old; }
+}
+
+async function confirmOrder(id) {
+  if (!confirm('Confirm this payment and generate tickets? Tickets will be emailed to the customer.')) return;
+  try {
+    const res = await apiFetch('/admin/orders/' + id + '/confirm', { method: 'POST' });
+    showToast(res.message || 'Order confirmed', 'success');
+    loadOrders();
+  } catch (e) { showToast(e.message); }
+}
+
+async function resendOrder(id) {
+  try {
+    const res = await apiFetch('/admin/orders/' + id + '/resend', { method: 'POST' });
+    showToast(res.message || 'Tickets sent', 'success');
+  } catch (e) { showToast(e.message); }
+}
+
+async function resendToAllPaid() {
+  const paid = orders.filter(o => o.paymentStatus === 'paid');
+  if (!paid.length) { showToast('No paid orders to resend'); return; }
+  if (!confirm('Send ticket emails to ' + paid.length + ' paid customer(s)?')) return;
+  const btn = document.getElementById('resendAllBtn');
+  btn.disabled = true; const old = btn.innerHTML; btn.innerHTML = '<span class="spinner"></span> Sending…';
+  let ok = 0, fail = 0;
+  for (const o of paid) {
+    try { await apiFetch('/admin/orders/' + o.id + '/resend', { method: 'POST' }); ok++; }
+    catch (e) { fail++; }
+  }
+  showToast('Sent to ' + ok + (fail ? (' · failed ' + fail) : '') + ' customer(s)', ok ? 'success' : 'error');
+  btn.disabled = false; btn.innerHTML = old;
+}
+
+(function init() {
+  if (adminToken) {
+    document.getElementById('adminTokenInput').value = adminToken;
+    initDashboard();
+  }
+})();
+</script>
+</body>
+</html>

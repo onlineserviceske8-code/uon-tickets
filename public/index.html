@@ -5,6 +5,43 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>University of Nairobi Freshers Night - Madfun</title>
 <meta name="description" content="UNSA Freshers Night 2026 — the official welcome party for University of Nairobi's newest students."/>
+<meta property="og:title" content="University of Nairobi Freshers Night - Madfun"/>
+<meta property="og:description" content="UNSA Freshers Night 2026 — the official welcome party for University of Nairobi's newest students. 18 Sept 2026, KICC Nairobi. Get tickets now."/>
+<meta property="og:type" content="website"/>
+<meta property="og:url" content="https://uon-tickets.vercel.app"/>
+<meta property="og:image" content="https://madfun-assets.s3.af-south-1.amazonaws.com/events/ea108a1f-dcdf-400b-ac42-98cad86a0a71/images/20260821_c99a79dadd62.jpg"/>
+<meta property="og:image:secured_url" content="https://madfun-assets.s3.af-south-1.amazonaws.com/events/ea108a1f-dcdf-400b-ac42-98cad86a0a71/images/20260821_c99a79dadd62.jpg"/>
+<meta property="og:image:type" content="image/jpeg"/>
+<meta property="og:image:width" content="1200"/>
+<meta property="og:image:height" content="630"/>
+<meta property="og:image:alt" content="University of Nairobi Freshers Night 2026 - KICC Nairobi"/>
+<meta property="og:locale" content="en_KE"/>
+<meta property="og:site_name" content="Madfun"/>
+<meta name="theme-color" content="#FFD100"/>
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="University of Nairobi Freshers Night - Madfun"/>
+<meta name="twitter:description" content="UNSA Freshers Night 2026 — the official welcome party for University of Nairobi's newest students. 18 Sept 2026, KICC Nairobi. Get tickets now."/>
+<meta name="twitter:image" content="https://madfun-assets.s3.af-south-1.amazonaws.com/events/ea108a1f-dcdf-400b-ac42-98cad86a0a71/images/20260821_c99a79dadd62.jpg"/>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "University of Nairobi Freshers Night",
+  "startDate": "2026-09-18T18:00:00+03:00",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "location": { "@type": "Place", "name": "KICC, Nairobi", "address": { "@type": "PostalAddress", "addressLocality": "Nairobi", "addressCountry": "KE" } },
+  "image": ["https://madfun-assets.s3.af-south-1.amazonaws.com/events/ea108a1f-dcdf-400b-ac42-98cad86a0a71/images/20260821_c99a79dadd62.jpg"],
+  "description": "UNSA Freshers Night 2026 — the official welcome party for University of Nairobi's newest students. 18 Sept 2026, KICC Nairobi.",
+  "offers": [
+    { "@type": "Offer", "name": "STUDENTS", "price": "200", "priceCurrency": "KES", "availability": "https://schema.org/InStock" },
+    { "@type": "Offer", "name": "NON-STUDENTS", "price": "400", "priceCurrency": "KES", "availability": "https://schema.org/InStock" },
+    { "@type": "Offer", "name": "VIP", "price": "1000", "priceCurrency": "KES", "availability": "https://schema.org/InStock" },
+    { "@type": "Offer", "name": "VVIP", "price": "2000", "priceCurrency": "KES", "availability": "https://schema.org/InStock" }
+  ]
+}
+</script>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎫</text></svg>"/>
 <link rel="stylesheet" href="./04qd-a12.f_2_.css"/>
 <link rel="stylesheet" href="./0qfvefbovd.bu.css"/>
 <script src="https://cdn.tailwindcss.com"></script>
@@ -175,23 +212,12 @@ body{font-family:Inter,system-ui,-apple-system,sans-serif;color:var(--ink);backg
           <div class="mt-0.5 text-xs text-[color:var(--muted)]">NAIROBI</div>
         </div>
       </div>
-
-      <div class="text-xs leading-relaxed text-[color:var(--muted)]">
-        <strong class="text-[color:var(--ink)]">Refunds</strong> — Full refund if the event is cancelled or rescheduled.
-      </div>
     </div>
 
     <!-- Right Column: Ticket Picker -->
     <aside class="self-start md:sticky md:top-20 ticket-picker-mobile">
       <div class="card-flush rounded-3xl border border-[color:var(--border)] bg-white p-4 shadow-xl shadow-zinc-900/5 md:p-5">
-        <div class="mb-1 flex items-baseline justify-between">
-          <div>
-            <div class="text-xs text-[color:var(--muted)]">From</div>
-            <div class="display text-3xl" id="minPrice">KSh 400</div>
-          </div>
-        </div>
-
-        <div class="mb-2 mt-4 text-xs font-bold uppercase tracking-wider text-[color:var(--muted)]">Tickets</div>
+        <div class="mb-2 text-lg font-bold text-[color:var(--ink)]">Tickets</div>
         <div class="space-y-1.5" id="ticketList">
           <div class="text-sm text-[color:var(--muted)] text-center py-4">Loading tickets...</div>
         </div>
@@ -202,8 +228,8 @@ body{font-family:Inter,system-ui,-apple-system,sans-serif;color:var(--ink);backg
           </div>
         </div>
 
-        <button class="mt-4 w-full rounded-full bg-[color:var(--ink)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:opacity-40 disabled:cursor-not-allowed" id="checkoutBtn" disabled onclick="openCheckout()">
-          Get Tickets
+        <button class="mt-4 w-full rounded-full bg-[color:#FFD100] px-6 py-3 text-sm font-bold text-[color:var(--ink)] transition hover:bg-yellow-400 disabled:opacity-40 disabled:cursor-not-allowed" id="checkoutBtn" disabled onclick="openCheckout()">
+          Select Tickets
         </button>
       </div>
     </aside>
@@ -255,6 +281,7 @@ body{font-family:Inter,system-ui,-apple-system,sans-serif;color:var(--ink);backg
       </div>
     </div>
     <button class="w-full rounded-full bg-[color:var(--ink)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800 disabled:opacity-40" onclick="processPayment()" id="payBtn">Pay Now</button>
+    <button class="mt-2 w-full rounded-full border-2 border-dashed border-amber-400 px-6 py-3 text-sm font-semibold text-amber-700 transition hover:bg-amber-50 hidden" onclick="simulatePayment()" id="simulateBtn">⚡ Simulate Payment (Test Only)</button>
   </div>
 </div>
 
@@ -263,11 +290,13 @@ body{font-family:Inter,system-ui,-apple-system,sans-serif;color:var(--ink);backg
   <div class="modal text-center">
     <button class="close-btn" onclick="closeModal('successModal')">&times;</button>
     <div class="text-5xl mb-3">🎉</div>
-    <h2 class="text-xl font-bold mb-2">Payment Successful!</h2>
-    <p class="text-sm text-[color:var(--muted)] mb-4">Your tickets have been confirmed.</p>
+    <h2 class="text-xl font-bold mb-1">Payment Successful!</h2>
+    <p class="text-sm text-[color:var(--muted)] mb-1">Your tickets have been confirmed.</p>
+    <p class="text-xs text-[color:var(--muted)] mb-4">A copy has also been sent to your email.</p>
     <div id="successOrderInfo"></div>
-    <button class="mt-4 w-full rounded-full bg-[color:var(--ink)] px-6 py-3 text-sm font-semibold text-white transition hover:bg-zinc-800" onclick="closeModal('successModal')">Done</button>
-    <button class="mt-2 w-full rounded-full border border-[color:var(--ink)] px-6 py-3 text-sm font-semibold text-[color:var(--ink)] transition hover:bg-zinc-100" onclick="downloadTickets()">Download Tickets</button>
+    <div id="successTickets" class="mt-4 space-y-3 text-left"></div>
+    <button class="mt-4 w-full rounded-full bg-[color:#FFD100] px-6 py-3 text-sm font-bold text-[color:var(--ink)] transition hover:bg-yellow-400" onclick="downloadTickets()">⬇ Download Tickets</button>
+    <button class="mt-2 w-full rounded-full border border-[color:var(--ink)] px-6 py-3 text-sm font-semibold text-[color:var(--ink)] transition hover:bg-zinc-100" onclick="closeModal('successModal')">Done</button>
   </div>
 </div>
 
@@ -277,13 +306,33 @@ body{font-family:Inter,system-ui,-apple-system,sans-serif;color:var(--ink);backg
 <script>
 const API = '/api';
 const EVENT_ID = 'b1011a';
+
+// Embedded event data for instant load (also fetched from API as fallback)
+const EMBEDDED_EVENT = {
+  id: 'b1011a',
+  name: 'University of Nairobi Freshers Night',
+  date: '2026-09-18T18:00:00+03:00',
+  venue: 'KICC, Nairobi',
+  description: "UNSA Freshers Night 2026 - the official welcome party for University of Nairobi's newest students.",
+  status: 'published',
+  ticketTypes: [
+    { id: 'student', name: 'STUDENTS', price: 200, quantity: 200, sold: 0, maxPerOrder: 2, currency: 'KSh' },
+    { id: 'regular', name: 'NON-STUDENTS', price: 400, quantity: 500, sold: 0, maxPerOrder: 4, currency: 'KSh' },
+    { id: 'vip', name: 'VIP', price: 1000, quantity: 100, sold: 0, maxPerOrder: 2, currency: 'KSh' },
+    { id: 'vvip', name: 'VVIP', price: 2000, quantity: 50, sold: 0, maxPerOrder: 2, currency: 'KSh' },
+    { id: 'group5', name: 'GROUP OF 5', price: 850, quantity: 50, sold: 0, maxPerOrder: 1, currency: 'KSh' },
+    { id: 'group3', name: 'GROUP OF 3', price: 510, quantity: 100, sold: 0, maxPerOrder: 1, currency: 'KSh' },
+  ]
+};
+
 let eventData = null;
 let cart = {};
 let selectedPayment = 'mpesa';
 let currentOrder = null;
+let testMode = false;
 
 async function apiFetch(path, opts = {}) {
-  const res = await fetch(API + path, { ...opts, headers: { 'Content-Type': 'application/json', ...opts.headers }, credentials: 'include' });
+  const res = await fetch(API + path, { ...opts, headers: { 'Content-Type': 'application/json', ...opts.headers }, credentials: 'omit' });
   const text = await res.text();
   let data;
   try { data = text ? JSON.parse(text) : {}; } catch { throw new Error('Invalid server response'); }
@@ -302,22 +351,38 @@ function openModal(id) { document.getElementById(id).classList.add('active'); }
 function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
 async function loadEvent() {
+  // Use embedded data immediately for instant render
   try {
-    eventData = await apiFetch('/events/' + EVENT_ID);
+    eventData = EMBEDDED_EVENT;
     renderTickets();
+    console.log('Tickets rendered from embedded data');
   } catch (e) {
-    document.getElementById('ticketList').innerHTML = '<div class="text-sm text-[color:var(--muted)] text-center py-4">Failed to load tickets. Please refresh.</div>';
-    showToast('Failed to load event: ' + e.message);
+    console.error('Render error:', e);
+    document.getElementById('ticketList').innerHTML = '<div class="text-sm text-red-600 text-center py-4">Error loading tickets: ' + e.message + '</div>';
+    return;
+  }
+  
+  // Fetch fresh data in background (updates sold counts)
+  try {
+    const fresh = await apiFetch('/events/' + EVENT_ID);
+    if (fresh && fresh.ticketTypes) {
+      // Preserve embedded structure, update sold/quantity from API
+      fresh.ticketTypes.forEach(ft => {
+        const et = eventData.ticketTypes.find(t => t.id === ft.id);
+        if (et) { et.sold = ft.sold; et.quantity = ft.quantity; }
+      });
+      renderTickets();
+      console.log('Tickets updated from API');
+    }
+  } catch (e) {
+    console.warn('Background event refresh failed:', e);
   }
 }
 
 function renderTickets() {
   if (!eventData || !eventData.ticketTypes) return;
   const list = document.getElementById('ticketList');
-  const minPrice = Math.min(...eventData.ticketTypes.map(t => Number(t.price)));
-  document.getElementById('minPrice').textContent = 'KSh ' + minPrice.toLocaleString();
-
-  const order = ['student', 'regular', 'vip', 'vvip', 'group'];
+  const order = ['student', 'regular', 'vip', 'vvip', 'group5', 'group3'];
   const sortedTypes = [...eventData.ticketTypes].sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
 
   list.innerHTML = sortedTypes.map(t => {
@@ -361,7 +426,7 @@ function updateSummary() {
   if (items.length === 0) {
     summaryEl.classList.add('hidden');
     btn.disabled = true;
-    btn.textContent = 'Get Tickets';
+    btn.textContent = 'Select Tickets';
     return;
   }
   const total = items.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
@@ -369,11 +434,11 @@ function updateSummary() {
   summaryEl.classList.remove('hidden');
   btn.disabled = false;
   const count = items.reduce((s, i) => s + i.quantity, 0);
-  btn.textContent = 'Get ' + count + ' Ticket' + (count > 1 ? 's' : '');
+  btn.textContent = 'Buy Now';
 }
 
 function getCartItems() {
-  const order = ['student', 'regular', 'vip', 'vvip', 'group'];
+  const order = ['student', 'regular', 'vip', 'vvip', 'group5', 'group3'];
   return Object.entries(cart)
     .map(([id, qty]) => {
       const tt = eventData.ticketTypes.find(t => t.id === id);
@@ -403,10 +468,10 @@ async function submitOrder() {
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>';
   try {
     const items = getCartItems().map(i => ({ typeId: i.typeId, quantity: i.quantity }));
-    const result = await apiFetch('/checkout/initiate', { method: 'POST', body: JSON.stringify({ eventId: EVENT_ID, tickets: items, customer: { name, email, phone } }) });
+    const result = await apiFetch('/checkout/initiate', { method: 'POST', body: JSON.stringify({ eventId: EVENT_ID, tickets: items, customer: { name, email, phone: '254' + phone.slice(1) } }) });
     currentOrder = result;
     closeModal('checkoutModal');
-    showPayment(result);
+    showPayment(currentOrder);
   } catch (e) { showToast('Checkout failed: ' + e.message); }
   finally { btn.disabled = false; btn.textContent = 'Continue to Payment'; }
 }
@@ -416,6 +481,10 @@ function showPayment(order) {
     '<div class="p-3 rounded-xl bg-[color:var(--surface)] text-sm mb-2">' +
     '<div class="flex justify-between"><span>Order</span><span class="font-semibold">' + escHtml(order.orderNumber) + '</span></div>' +
     '<div class="flex justify-between mt-1"><span>Total</span><span class="font-bold">KSh ' + Number(order.total).toLocaleString() + '</span></div></div>';
+  // Pre-fill M-Pesa phone with customer's phone (ensure 254 format)
+  const custPhone = order.customer?.phone || '';
+  const mpesaPhone = custPhone.startsWith('254') ? custPhone : ('254' + custPhone.slice(1));
+  document.getElementById('mpesaPhone').value = mpesaPhone;
   openModal('paymentModal');
 }
 
@@ -428,45 +497,178 @@ function selectPayment(method) {
 
 async function processPayment() {
   const btn = document.getElementById('payBtn');
+  if (!btn) return;
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Processing...';
   try {
+    if (!currentOrder) { showToast('Order not found. Please restart checkout.'); btn.disabled = false; btn.textContent = 'Pay Now'; return; }
     if (selectedPayment === 'mpesa') {
       let phone = document.getElementById('mpesaPhone').value.trim().replace(/[^0-9]/g, '');
       if (/^07\d{8}$/.test(phone)) phone = '254' + phone.slice(1);
-      if (!/^254\d{9}$/.test(phone)) { showToast('Enter a valid phone number (254XXXXXXXXX or 07XXXXXXXX)'); btn.disabled = false; btn.textContent = 'Pay Now'; return; }
-      await apiFetch('/payments/mpesa', { method: 'POST', body: JSON.stringify({ sessionId: currentOrder.sessionId, phoneNumber: phone }) });
+      if (!/^254[17]\d{8}$/.test(phone)) { showToast('Enter a valid Safaricom number (2547XXXXXXXX or 07XXXXXXXX)'); btn.disabled = false; btn.textContent = 'Pay Now'; return; }
+      
+      const res = await apiFetch('/payments/mpesa', { method: 'POST', body: JSON.stringify({ sessionId: currentOrder.sessionId, phoneNumber: phone }) });
+      
+      // Start polling for payment status
+      startPaymentPolling(currentOrder.sessionId, phone, res.checkoutRequestId);
+      
       btn.disabled = true;
-      btn.textContent = 'Order submitted. Awaiting confirmation.';
-      document.getElementById('paymentModal').querySelector('.modal').innerHTML =
-        '<button class="close-btn" onclick="closeModal(\'paymentModal\')">&times;</button>' +
-        '<h2 class="text-xl font-bold mb-3">Order received</h2>' +
-        '<p class="text-sm text-[color:var(--muted)] mb-2">Your order <strong>' + escHtml(currentOrder.orderNumber) + '</strong> for <strong>KSh ' + Number(currentOrder.total).toLocaleString() + '</strong> has been received.</p>' +
-        '<p class="text-sm text-[color:var(--muted)] mb-2">Please complete payment via M-Pesa to <strong>0085060049062</strong> using the phone number ' + escHtml(phone) + '.</p>' +
-        '<p class="text-sm text-[color:var(--muted)]">Once our team confirms your payment, your tickets will be issued on this page. You may check back shortly.</p>';
+      btn.textContent = 'STK Push sent. Check your phone.';
+      
+      const modalEl = document.getElementById('paymentModal');
+      const modalContent = modalEl?.querySelector('.modal');
+      // Format phone for display (07XXXXXXXX)
+      const displayPhone = phone.startsWith('254') ? '0' + phone.slice(3) : phone;
+      if (modalContent) {
+        modalContent.innerHTML =
+          '<button class="close-btn" onclick="closeModal(\'paymentModal\')">&times;</button>' +
+          '<h2 class="text-xl font-bold mb-4 text-center">Complete Payment</h2>' +
+          '<div class="p-4 rounded-xl bg-amber-50 border border-amber-200 mb-4 text-center">' +
+          '<p class="text-lg font-semibold text-amber-800 mb-1">📱 Check your phone</p>' +
+          '<p class="text-amber-700">We sent an M-Pesa prompt to <strong>' + escHtml(displayPhone) + '</strong></p>' +
+          '</div>' +
+          '<p class="text-sm text-[color:var(--muted)] text-center mb-4">Order: <strong>' + escHtml(currentOrder.orderNumber) + '</strong> — KSh ' + Number(currentOrder.total).toLocaleString() + '</p>' +
+          '<div class="mt-4 text-center">' +
+          '<div class="inline-flex items-center gap-3 rounded-xl bg-[color:var(--surface)] px-5 py-3 mx-auto">' +
+          '<span class="text-2xl font-bold tabular-nums" id="pollCountdown">2:00</span>' +
+          '<div class="text-left"><div class="text-xs font-semibold text-[color:var(--ink)]">Enter PIN on your phone</div>' +
+          '<div class="text-xs text-[color:var(--muted)]" id="pollStatus">Waiting for payment...</div></div>' +
+          '</div>' +
+          '<button class="mt-4 w-full rounded-full border border-[color:var(--ink)] px-6 py-2 text-sm font-semibold text-[color:var(--ink)] transition hover:bg-zinc-100" id="checkNowBtn" onclick="checkPaymentNow()">I have entered PIN - Check Status</button>';
+      }
     } else { showToast('Card payments coming soon!'); btn.disabled = false; btn.textContent = 'Pay Now'; }
-  } catch (e) { showToast('Payment failed: ' + e.message); btn.disabled = false; btn.textContent = 'Pay Now'; }
+  } catch (e) { 
+    const msg = e?.message || 'Unknown error';
+    if (msg.includes('4 KSh for commission') || msg.toLowerCase().includes('insufficient') || msg.toLowerCase().includes('balance')) {
+      showToast('Insufficient balance. Ensure you have at least KSh ' + Number(currentOrder?.total || 204).toLocaleString() + ' (includes 4 KSh commission)');
+    } else {
+      showToast('Payment failed: ' + msg);
+    }
+    btn.disabled = false; btn.textContent = 'Pay Now'; 
+  }
+}
+
+let pollInterval = null;
+let pollSession = null;
+let pollAttempts = 0;
+let pollStartTime = 0;
+const POLL_MAX_ATTEMPTS = 240; // 2-minute window at 500ms interval
+const POLL_INTERVAL_MS = 500;
+
+function pollTick() {
+  const elapsed = Math.floor((Date.now() - pollStartTime) / 1000);
+  const remaining = Math.max(0, 120 - elapsed);
+  const mins = Math.floor(remaining / 60);
+  const secs = String(remaining % 60).padStart(2, '0');
+  const countdownEl = document.getElementById('pollCountdown');
+  if (countdownEl) countdownEl.textContent = mins + ':' + secs;
+}
+
+async function runPollCheck(sessionId) {
+  const pollStatusEl = document.getElementById('pollStatus');
+  pollAttempts++;
+  pollTick();
+  if (pollStatusEl) pollStatusEl.textContent = 'Waiting for payment...';
+
+  try {
+    const res = await apiFetch('/payments/status/' + sessionId);
+    if (res.status === 'completed' || res.paymentStatus === 'paid') {
+      if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+      if (pollStatusEl) pollStatusEl.textContent = 'Payment confirmed ✓';
+      await showSuccess();
+      closeModal('paymentModal');
+      setTimeout(() => { downloadTickets(); }, 500);
+      return true;
+    } else if (res.status === 'failed') {
+      if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+      const reason = res.failureReason || 'Payment failed';
+      if (pollStatusEl) pollStatusEl.textContent = reason;
+      showToast(reason);
+      const btn = document.getElementById('payBtn');
+      if (btn) { btn.disabled = false; btn.textContent = 'Retry Payment'; }
+      return true;
+    } else if (pollAttempts >= POLL_MAX_ATTEMPTS) {
+      if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
+      if (pollStatusEl) pollStatusEl.textContent = 'Payment timed out. Please retry.';
+      showToast('Payment timed out. Please retry.');
+      const btn = document.getElementById('payBtn');
+      if (btn) { btn.disabled = false; btn.textContent = 'Retry Payment'; }
+      return true;
+    }
+  } catch (e) {
+    console.warn('Polling error:', e);
+  }
+  return false;
+}
+
+function startPaymentPolling(sessionId, phone, checkoutRequestId) {
+  if (pollInterval) clearInterval(pollInterval);
+  pollSession = sessionId;
+  pollAttempts = 0;
+  pollStartTime = Date.now();
+  pollInterval = setInterval(() => { runPollCheck(sessionId); }, POLL_INTERVAL_MS);
+  runPollCheck(sessionId);
+}
+
+function checkPaymentNow() {
+  if (!pollSession) return;
+  const btnEl = document.getElementById('checkNowBtn');
+  if (btnEl) { btnEl.disabled = true; btnEl.textContent = 'Checking...'; }
+  runPollCheck(pollSession);
+  setTimeout(() => { if (btnEl) { btnEl.disabled = false; btnEl.textContent = 'I have completed payment - Check Now'; } }, 1500);
+}
+
+async function checkTestMode() {
+  try {
+    const res = await apiFetch('/test/mode');
+    testMode = !!res.testMode;
+    const btn = document.getElementById('simulateBtn');
+    if (btn) { if (testMode) btn.classList.remove('hidden'); else btn.classList.add('hidden'); }
+  } catch (e) { /* production: 404, button stays hidden */ }
+}
+
+async function simulatePayment() {
+  if (!currentOrder) { showToast('Complete checkout first'); return; }
+  const btn = document.getElementById('simulateBtn');
+  if (btn) btn.disabled = true;
+  try {
+    await apiFetch('/payments/mpesa', {
+      method: 'POST',
+      body: JSON.stringify({ sessionId: currentOrder.sessionId, phoneNumber: '254712345678', simulate: true })
+    });
+    startPaymentPolling(currentOrder.sessionId, '254712345678', 'SIM');
+  } catch (e) {
+    showToast('Simulation failed: ' + e.message);
+    if (btn) btn.disabled = false;
+  }
 }
 
 async function showSuccess() {
   try {
+    if (!currentOrder) { showToast('Order not found'); return; }
     const order = await apiFetch('/orders/' + currentOrder.orderId);
-    let ticketsHtml = '';
-    if (order.tickets && order.tickets.length) {
-      ticketsHtml = '<div class="mt-4 space-y-2">' + order.tickets.map(t =>
-        '<div class="ticket-card">' +
-        (t.qr_code ? '<img src="' + t.qr_code + '" alt="QR">' : '<div class="w-20 h-20 bg-zinc-100 rounded-lg flex items-center justify-center text-[color:var(--muted)] text-xs">QR</div>') +
-        '<div><div class="text-sm font-semibold">' + escHtml(t.ticket_type) + '</div><div class="text-xs text-[color:var(--muted)]">' + escHtml(t.id ? t.id.substring(0,8) + '...' : '') + '</div></div></div>'
-      ).join('') + '</div>';
-    }
+    currentOrder = order;
     document.getElementById('successOrderInfo').innerHTML =
       '<div class="text-left p-3 rounded-xl bg-[color:var(--surface)] text-sm">' +
-      '<div class="flex justify-between"><span>Order</span><span class="font-semibold">' + escHtml(order.orderNumber || currentOrder.orderNumber) + '</span></div>' +
-      '<div class="flex justify-between mt-1"><span>Total</span><span class="font-bold">KSh ' + Number(order.total || currentOrder.total).toLocaleString() + '</span></div></div>' + ticketsHtml;
+      '<div class="flex justify-between"><span>Order</span><span class="font-semibold">' + escHtml(order.orderNumber || '') + '</span></div>' +
+      '<div class="flex justify-between mt-1"><span>Total</span><span class="font-bold">KSh ' + Number(order.total || 0).toLocaleString() + '</span></div></div>';
+
+    const container = document.getElementById('successTickets');
+    if (order.tickets && order.tickets.length) {
+      container.innerHTML = order.tickets.map(t => {
+        const qr = ticketQrDataUrl('TICKET|' + t.id + '|' + (order.orderNumber || ''));
+        return '<div class="flex items-center gap-3 rounded-xl border border-[color:var(--border)] p-3">' +
+          (qr ? '<img src="' + qr + '" alt="QR code" class="w-20 h-20 shrink-0" style="image-rendering:pixelated">' : '<div class="w-20 h-20 shrink-0 bg-zinc-100 rounded-lg flex items-center justify-center text-[color:var(--muted)] text-xs">QR</div>') +
+          '<div class="min-w-0"><div class="text-sm font-bold">' + escHtml(t.ticket_type) + '</div>' +
+          '<div class="text-xs text-[color:var(--muted)] mt-0.5 truncate">Ticket ID: <span class="font-mono">' + escHtml(t.id) + '</span></div>' +
+          '<div class="text-xs text-[color:var(--muted)] mt-0.5">Admit: <strong>' + escHtml(order.customer?.name || '') + '</strong></div></div></div>';
+      }).join('');
+    } else {
+      container.innerHTML = '<div class="p-3 rounded-xl bg-zinc-50 text-sm text-center text-[color:var(--muted)]">Tickets will appear here shortly. Check your email or click Download.</div>';
+    }
   } catch (e) {
-    document.getElementById('successOrderInfo').innerHTML = '<div class="p-3 rounded-xl bg-[color:var(--surface)] text-sm text-left"><div class="font-semibold">Order: ' + escHtml(currentOrder.orderNumber) + '</div><div>Check your email for tickets.</div></div>';
+    document.getElementById('successOrderInfo').innerHTML = '<div class="p-3 rounded-xl bg-[color:var(--surface)] text-sm text-left"><div class="font-semibold">Order: ' + escHtml(currentOrder?.orderNumber || 'Unknown') + '</div><div>Check your email for tickets.</div></div>';
   }
   openModal('successModal');
-  cart = {}; updateSummary(); renderTickets();
 }
 
 function ticketQrDataUrl(text) {
@@ -481,10 +683,11 @@ function ticketQrDataUrl(text) {
 
 async function downloadTickets() {
   try {
+    if (!currentOrder) { showToast('No active order'); return; }
     const order = await apiFetch('/orders/' + currentOrder.orderId);
     if (order.paymentStatus !== 'paid') { showToast('Tickets are available once payment is confirmed.'); return; }
     buildTicketDoc(order, buildQrMap(order));
-  } catch (e) { showToast('Could not load tickets: ' + e.message); }
+  } catch (e) { showToast('Could not load tickets: ' + (e?.message || 'Unknown error')); }
 }
 
 function buildQrMap(order) {
@@ -572,10 +775,21 @@ function buildTicketDoc(order, qrMap) {
 }
 
 function escHtml(s) {
-  return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&')
+    .replace(/</g, '<')
+    .replace(/>/g, '>')
+    .replace(/"/g, '"')
+    .replace(/'/g, ''');
 }
 
-loadEvent();
+// Immediate render
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', loadEvent);
+} else {
+  loadEvent();
+}
+checkTestMode();
 </script>
 </body>
 </html>
