@@ -104,7 +104,7 @@ const EVENT_DATA = {
   id: 'b1011a',
   name: 'University of Nairobi Freshers Night',
   date: '2026-09-18T18:00:00+03:00',
-  venue: 'KICC, Nairobi',
+  venue: 'Goan Institute, Nairobi',
   description: "UNSA Freshers Night 2026 - the official welcome party for University of Nairobi's newest students.",
   status: 'published',
   ticketTypes: [
@@ -590,8 +590,9 @@ export async function fetch(req) {
     }
     // ----------------------------------------------------------------------
 
-    // No callback URL - rely purely on polling like before webhook config
-    const result = await lipawinStkPush(phoneNumber, order.total, '');
+    // Send webhook callback URL so LipaWin can notify us of payment completion
+    const callbackUrl = `${deployedUrl}/api/payments/callback`;
+    const result = await lipawinStkPush(phoneNumber, order.total, callbackUrl);
 
     if (!result.ok) return fail(result.message, 400);
 
@@ -640,22 +641,55 @@ export async function fetch(req) {
       console.warn('WEBHOOK_SECRET is set but no signature header received - continuing without verification');
     }
 
-    const txnId = input.transaction_id || input.transaction_request_id || input.TransactionRequestID
-      || input.checkout_request_id || input.CheckoutRequestID || null;
-    const status = input.status || input.transaction_status || input.Status || null;
-    const resultCode = input.code || input.result_code || input.ResultCode || null;
-    const resultDesc = input.message || input.ResultDesc || input.ResponseDescription || '';
+    // Try multiple possible field names for transaction ID (LipaWin varies)
+    const txnId = input.transaction_id
+      || input.transaction_request_id
+      || input.TransactionRequestID
+      || input.checkout_request_id
+      || input.CheckoutRequestID
+      || input.transactionId
+      || input.TransactionId
+      || input.txn_id
+      || input.txnId
+      || input.id
+      || null;
 
-    if (!txnId) return new Response('Missing transaction_id', { status: 400 });
+    const status = input.status || input.transaction_status || input.Status || input.state || input.State || null;
+    const resultCode = input.code || input.result_code || input.ResultCode || input.status_code || input.StatusCode || null;
+    const resultDesc = input.message || input.ResultDesc || input.ResponseDescription || input.description || input.Description || '';
 
-    const sessionId = await getVal(`txn:${txnId}`);
-    if (!sessionId) return new Response('Payment not found', { status: 404 });
+    console.log('Webhook parsed:', { txnId, status, resultCode, resultDesc });
+
+    if (!txnId) {
+      console.error('No transaction ID found in webhook payload');
+      return new Response('Missing transaction_id', { status: 400 });
+    }
+
+    // First try: lookup by transactionRequestId (stored during STK push)
+    let sessionId = await getVal(`txn:${txnId}`);
+    
+    // Fallback: try checkoutRequestId if different
+    if (!sessionId && input.checkout_request_id) {
+      sessionId = await getVal(`txn:${input.checkout_request_id}`);
+    }
+    if (!sessionId && input.CheckoutRequestID) {
+      sessionId = await getVal(`txn:${input.CheckoutRequestID}`);
+    }
+
+    if (!sessionId) {
+      console.error('Payment not found for txnId:', txnId);
+      return new Response('Payment not found', { status: 404 });
+    }
+
     const order = await getOrderBySession(sessionId);
     if (!order) return new Response('Order not found', { status: 404 });
     const payment = await getPayment(sessionId);
 
-    const isSuccess = status === 'completed' || status === 'success' || status === 'Completed'
-      || String(resultCode) === '200' || String(resultCode) === '0' || (resultDesc && resultDesc.toLowerCase() === 'success');
+    const isSuccess = status === 'completed' || status === 'success' || status === 'Completed' || status === 'paid' || status === 'Success'
+      || String(resultCode) === '200' || String(resultCode) === '0'
+      || (resultDesc && resultDesc.toLowerCase().includes('success'));
+
+    console.log('Webhook result:', { isSuccess, sessionId, orderId: order.id });
 
     if (isSuccess) {
       await confirmOrder(order, payment);
