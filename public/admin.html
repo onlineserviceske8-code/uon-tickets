@@ -181,7 +181,11 @@ function renderTable() {
       '<td class="text-xs text-[color:var(--muted)]">' + (o.paidAt ? fmtDate(o.paidAt) : '-') + '</td>' +
       '<td>' +
         (!paid ? '<button class="btn btn-green mb-1" onclick="confirmOrder(\'' + escHtml(o.id) + '\')">✓ Confirm</button><br>' : '') +
-        (paid && o.tickets && o.tickets.length ? '<button class="btn btn-yellow mb-1" onclick="resendOrder(\'' + escHtml(o.id) + '\')">📧 Resend Tickets</button>' : (pending ? '<span class="text-xs text-[color:var(--muted)]">Awaiting payment</span>' : '')) +
+        (paid
+          ? '<button class="btn btn-dark mb-1" onclick="downloadOrderTickets(\'' + escHtml(o.id) + '\',\'' + escHtml(o.orderNumber) + '\')">⬇ Download</button> ' +
+            (o.tickets && o.tickets.length ? '<button class="btn btn-yellow mb-1" onclick="resendOrder(\'' + escHtml(o.id) + '\')">📧 Resend</button>' : '') +
+            '<br>'
+          : (pending ? '<span class="text-xs text-[color:var(--muted)]">Awaiting payment</span>' : '')) +
         (qrForList ? '<div class="mt-1"><img src="' + qrForList + '" class="inline-block w-10 h-10" style="image-rendering:pixelated" title="First ticket QR"></div>' : '') +
       '</td>' +
       '</tr>';
@@ -222,6 +226,31 @@ async function resendOrder(id) {
   try {
     const res = await apiFetch('/admin/orders/' + id + '/resend', { method: 'POST' });
     showToast(res.message || 'Tickets sent', 'success');
+  } catch (e) { showToast(e.message); }
+}
+
+async function downloadOrderTickets(id, orderNumber) {
+  try {
+    const res = await fetch(API + '/admin/orders/' + id + '/tickets/download', {
+      headers: { 'Authorization': 'Bearer ' + adminToken },
+      credentials: 'omit',
+    });
+    if (res.status === 401) { showToast('Unauthorized - check admin token'); logout(); return; }
+    if (!res.ok) {
+      let msg = 'Download failed (' + res.status + ')';
+      try { const d = await res.json(); if (d.error) msg = d.error; } catch (e) {}
+      throw new Error(msg);
+    }
+    const text = await res.text();
+    const blob = new Blob([text], { type: 'text/html;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'tickets-' + (orderNumber || id) + '.html';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
   } catch (e) { showToast(e.message); }
 }
 

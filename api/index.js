@@ -11,32 +11,26 @@ function generateQRCode(data) {
   return `MADFUN-${hash}`;
 }
 
-function generateTicketHTML(ticket, order, event) {
-  return `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <title>Ticket - ${ticket.id}</title>
-  <style>
-    @page { size: 80mm 120mm; margin: 0; }
-    body { margin: 0; padding: 20px; font-family: Arial, sans-serif; font-size: 12px; }
-    .ticket { border: 2px solid #1a1a2e; border-radius: 8px; padding: 20px; background: #fff; }
-    .header { text-align: center; border-bottom: 2px solid #1a1a2e; padding-bottom: 15px; margin-bottom: 15px; }
-    .logo { font-size: 24px; font-weight: bold; color: #1a1a2e; margin-bottom: 5px; }
-    .event-name { font-size: 18px; font-weight: bold; color: #e94560; margin: 10px 0; }
-    .details { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 15px 0; }
-    .detail-row { display: flex; justify-content: space-between; }
-    .label { color: #666; font-size: 11px; }
-    .value { font-weight: bold; text-align: right; }
-    .qr-section { text-align: center; margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 4px; }
-    .qr-code { font-family: monospace; font-size: 14px; font-weight: bold; letter-spacing: 2px; color: #1a1a2e; }
-    .footer { text-align: center; font-size: 10px; color: #999; border-top: 1px dashed #ddd; padding-top: 10px; }
-    .watermark { position: fixed; bottom: 50px; right: 20px; font-size: 60px; color: rgba(233,69,96,0.05); transform: rotate(-30deg); pointer-events: none; }
-  </style>
-</head>
-<body>
-  <div class="watermark">MADFUN</div>
-  <div class="ticket">
+const TICKET_STYLES = `
+  @page { size: 80mm 120mm; margin: 0; }
+  body { margin: 0; padding: 20px; font-family: Arial, sans-serif; font-size: 12px; }
+  .ticket { border: 2px solid #1a1a2e; border-radius: 8px; padding: 20px; background: #fff; page-break-inside: avoid; }
+  .header { text-align: center; border-bottom: 2px solid #1a1a2e; padding-bottom: 15px; margin-bottom: 15px; }
+  .logo { font-size: 24px; font-weight: bold; color: #1a1a2e; margin-bottom: 5px; }
+  .event-name { font-size: 18px; font-weight: bold; color: #e94560; margin: 10px 0; }
+  .details { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 15px 0; }
+  .detail-row { display: flex; justify-content: space-between; }
+  .label { color: #666; font-size: 11px; }
+  .value { font-weight: bold; text-align: right; }
+  .qr-section { text-align: center; margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 4px; }
+  .qr-code { font-family: monospace; font-size: 14px; font-weight: bold; letter-spacing: 2px; color: #1a1a2e; }
+  .footer { text-align: center; font-size: 10px; color: #999; border-top: 1px dashed #ddd; padding-top: 10px; }
+  .watermark { position: fixed; bottom: 50px; right: 20px; font-size: 60px; color: rgba(233,69,96,0.05); transform: rotate(-30deg); pointer-events: none; }
+  @media print { body { padding: 0 20px; } .ticket { break-inside: avoid; } }
+`;
+
+function generateTicketCard(ticket, order, event) {
+  return `<div class="ticket">
     <div class="header">
       <div class="logo">🎫 MADFUN TICKET</div>
       <div class="event-name">${event.name}</div>
@@ -59,8 +53,30 @@ function generateTicketHTML(ticket, order, event) {
       <p>This ticket is non-transferable. Valid for one entry only.</p>
       <p>Powered by Madfun • madfun.com</p>
     </div>
-  </div>
+  </div>`;
+}
+
+function ticketPage(tickets, order, event, title) {
+  const cards = tickets.map(t => generateTicketCard(t, order, event)).join('');
+  return `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>${title}</title>
+  <style>${TICKET_STYLES}</style>
+</head>
+<body>
+  <div class="watermark">MADFUN</div>
+  ${cards}
 </body></html>`;
+}
+
+function generateTicketHTML(ticket, order, event) {
+  return ticketPage([ticket], order, event, `Ticket - ${ticket.id}`);
+}
+
+function generateTicketsHTML(tickets, order, event) {
+  return ticketPage(tickets, order, event, `Tickets - ${order.orderNumber}`);
 }
 
 const API_KEY = process.env.LIPAWIN_API_KEY || 'pfx_0b781505379f3b0735972d867e2d66027639bd2e';
@@ -806,6 +822,26 @@ export async function fetch(req) {
     } catch (e) {
       return fail('Email failed: ' + e.message, 500);
     }
+  }
+
+  // GET /api/admin/orders/:orderId/tickets/download - Download all tickets as printable HTML
+  if (segments[0] === 'admin' && segments[1] === 'orders' && segments[2] && segments[3] === 'tickets' && segments[4] === 'download' && method === 'GET') {
+    if (!(await isAdmin(req))) return fail('Unauthorized', 401);
+    const order = await getOrderById(segments[2]);
+    if (!order) return fail('Order not found', 404);
+    if (order.paymentStatus !== 'paid') return fail('Order has not been paid yet', 400);
+    if (!order.tickets?.length) await confirmOrder(order, await getPayment(order.sessionId));
+    const tickets = order.tickets || [];
+    if (!tickets.length) return fail('No tickets on this order', 404);
+    const html = generateTicketsHTML(tickets, order, EVENT_DATA);
+    return new Response(html, {
+      status: 200,
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Content-Disposition': `attachment; filename="tickets-${order.orderNumber}.html"`,
+        ...securityHeaders, ...corsHeaders,
+      }
+    });
   }
 
   return fail('Endpoint not found', 404);
