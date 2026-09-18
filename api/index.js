@@ -479,10 +479,12 @@ export async function fetch(req) {
     return respond({ status: 'ok', live: 'LipaWin STK Push', timestamp: new Date().toISOString(), redis: USE_REDIS, testMode: TEST_MODE });
   }
 
-  // GET /api/test/mode - tells the UI whether the simulator is available (404 in production)
+  // GET /api/test/mode - tells the UI whether the simulator is available.
+  // Always returns 200 (testMode=false in production) so the browser never
+  // logs a failed-resource 404.
   if (segments[0] === 'test' && segments[1] === 'mode' && method === 'GET') {
-    if (!TEST_MODE) return fail('Test mode is not enabled in production', 404);
-    return respond({ testMode: true, resendConfigured: !!RESEND_API_KEY, adminTokenSet: !!ADMIN_TOKEN });
+    if (!TEST_MODE) return respond({ testMode: false, available: false });
+    return respond({ testMode: true, available: true, resendConfigured: !!RESEND_API_KEY, adminTokenSet: !!ADMIN_TOKEN });
   }
 
   // GET /api/events/:id
