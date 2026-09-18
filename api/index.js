@@ -89,6 +89,12 @@ const TSTATUS_URL = process.env.LIPAWIN_TSTATUS_URL || 'https://lipawin.com/api/
 const WEBHOOK_SECRET = process.env.LIPAWIN_WEBHOOK_SECRET || '';
 const ADMIN_TOKEN = process.env.ADMIN_TOKEN || '';
 
+// Number of consecutive negative LipaWin status checks before a payment is
+// treated as failed. Prevents a transient rejection (e.g. right after the
+// customer enters their PIN, while the payment is still settling) from
+// surfacing as "Payment failed".
+const FAILURE_THRESHOLD = 3;
+
 // Test/simulation mode. NEVER enabled in production - the Vercel function does
 // not set TEST_MODE, so all simulate endpoints return 404 and the real LipaWin
 // flow runs exactly as before. Only the local dev-server.js sets it to '1'.
@@ -249,14 +255,14 @@ async function lipawinCheckStatus(transactionRequestId) {
     status === 'completed' || status === 'success' || status === 'successful' ||
     status === 'paid' || status === 'confirmed' ||
     resultCode === '200' || resultCode === '0';
-  const isFailed =
+  const isRejected =
     status === 'failed' || status === 'cancelled' || status === 'reversed' ||
-    status === 'declined' || status === 'abandoned' || status === 'error' ||
-    resultCode === '404' || resultCode === '500' || resultCode === '1037';
+    status === 'declined' || status === 'abandoned' || status === 'rejected' ||
+    status === 'expired' || resultCode === '1037';
   if (isCompleted) {
     return { ok: true, status: 'completed', message: data.message || data.result_desc || 'Payment completed' };
   }
-  if (isFailed) {
+  if (isRejected) {
     return { ok: true, status: 'failed', message: data.message || data.result_desc || 'Payment failed' };
   }
   return { ok: true, status: 'pending', message: data.message || 'Payment still pending' };
@@ -678,13 +684,25 @@ export async function fetch(req) {
         await confirmOrder(order, payment);
         return respond({ status: 'completed', paymentStatus: 'paid', orderId: order.id, orderNumber: order.orderNumber });
       }
+      // LipaWin can transiently report a rejection while the payment is still
+      // settling right after the customer enters their PIN. Only accept a
+      // terminal failure after FAILURE_THRESHOLD consecutive negative checks.
       if (res.ok && res.status === 'failed') {
-        payment.status = 'failed'; payment.failedAt = new Date().toISOString(); 
+        const failCount = (payment.failCount || 0) + 1;
+        let failureReason = res.message;
         if (res.message && (res.message.toLowerCase().includes('insufficient') || res.message.toLowerCase().includes('balance') || res.message.toLowerCase().includes('funds'))) {
-          payment.failureReason = 'Payment failed. Needs 4 KSh for commission';
-        } else {
-          payment.failureReason = res.message;
+          failureReason = 'Payment failed. Needs 4 KSh for commission';
         }
+        if (failCount < FAILURE_THRESHOLD) {
+          payment.failCount = failCount; payment.failureReason = failureReason;
+          await setPayment(payment);
+          return respond({
+            status: 'pending', paymentStatus: 'pending', orderId: order.id, orderNumber: order.orderNumber,
+            failChecks: failCount, commission: order.commission, subtotal: order.subtotal, total: order.total
+          });
+        }
+        payment.status = 'failed'; payment.failedAt = new Date().toISOString();
+        payment.failureReason = failureReason;
         await setPayment(payment);
         return respond({ status: 'failed', paymentStatus: 'failed', orderId: order.id, orderNumber: order.orderNumber, failureReason: payment.failureReason });
       }
