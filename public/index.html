@@ -154,6 +154,25 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
           </div>
         </div>
 
+        <!-- Tickets / Booking -->
+        <div id="tickets" class="rounded-3xl border border-[color:var(--line)] bg-white p-6 md:p-8 mb-6 scroll-mt-20">
+          <div class="mb-4 flex items-center justify-between">
+            <div class="font-ui text-lg font-semibold">Select Tickets</div>
+            <span class="badge" style="cursor:default">● Available</span>
+          </div>
+          <div id="ticketList"></div>
+
+          <div id="summarySection" class="mt-4 hidden">
+            <div class="border-t border-[color:var(--line)] pt-4 space-y-1">
+              <div class="flex justify-between text-base font-semibold"><span>Total</span><span id="total">KES 0</span></div>
+            </div>
+          </div>
+
+          <button class="btn w-full mt-4" id="checkoutBtn" disabled onclick="openCheckout()" style="width:100%">
+            Select Tickets
+          </button>
+        </div>
+
         <!-- Description -->
         <div class="rounded-3xl border border-[color:var(--line)] bg-white p-6 md:p-8 mb-6">
           <h2 class="text-2xl mb-4">About This Event</h2>
@@ -189,25 +208,6 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
                 src="https://www.google.com/maps?q=-1.2797442,36.8160935&z=16&output=embed"></iframe>
             </div>
           </div>
-        </div>
-
-        <!-- Tickets / Booking -->
-        <div id="tickets" class="rounded-3xl border border-[color:var(--line)] bg-white p-6 md:p-8 mt-6 scroll-mt-20">
-          <div class="mb-4 flex items-center justify-between">
-            <div class="font-ui text-lg font-semibold">Select Tickets</div>
-            <span class="badge" style="cursor:default">● Available</span>
-          </div>
-          <div id="ticketList"></div>
-
-          <div id="summarySection" class="mt-4 hidden">
-            <div class="border-t border-[color:var(--line)] pt-4 space-y-1">
-              <div class="flex justify-between text-base font-semibold"><span>Total</span><span id="total">KES 0</span></div>
-            </div>
-          </div>
-
-          <button class="btn w-full mt-4" id="checkoutBtn" disabled onclick="openCheckout()" style="width:100%">
-            Select Tickets
-          </button>
         </div>
     </div>
   </div>
