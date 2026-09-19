@@ -6,7 +6,7 @@ import nodeFetch from 'node-fetch';
 import { createHmac, timingSafeEqual } from 'crypto';
 
 function generateQRCode(data) {
-  return 'https://zenlipa.co.ke/events/ImFvys';
+  return 'https://uon-tickets.vercel.app';
 }
 
 const TICKET_STYLES = `
