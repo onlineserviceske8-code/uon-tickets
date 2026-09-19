@@ -48,7 +48,6 @@ function generateTicketCard(ticket, order, event) {
     </div>
     <div class="footer">
       <p>This ticket is non-transferable. Valid for one entry only.</p>
-      <p>TICKETED BY ZENLIPA</p>
     </div>
   </div>`;
 }
@@ -400,7 +399,7 @@ function buildTicketEmailHTML(order, event) {
       <div style="margin-top:20px;padding:12px;background:#fafafa;border-radius:8px;font-size:13px;color:#71717a">
         <strong>Order:</strong> ${order.orderNumber} · <strong>Total paid:</strong> KES ${order.total}
       </div>
-      <p style="margin:20px 0 0;font-size:12px;color:#9ca3af">TICKETED BY ZENLIPA · Tickets are non-transferable.</p>
+      <p style="margin:20px 0 0;font-size:12px;color:#9ca3af">Tickets are non-transferable.</p>
     </div>
   </div>`;
 }
