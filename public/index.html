@@ -444,14 +444,14 @@ function updateSummary() {
   if (items.length === 0) {
     summaryEl.classList.add('hidden');
     btn.disabled = true;
-    btn.textContent = 'Select Tickets';
+    btn.textContent = 'Reserve now';
     return;
   }
   const total = items.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
   document.getElementById('total').textContent = 'KES ' + total.toLocaleString();
   summaryEl.classList.remove('hidden');
   btn.disabled = false;
-  btn.textContent = 'Buy Now';
+    btn.textContent = 'Reserve now';
 }
 
 function getCartItems() {
