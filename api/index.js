@@ -1,4 +1,4 @@
-// Vercel serverless API - LIVE M-Pesa STK Push via LipaWin
+﻿// Vercel serverless API - LIVE M-Pesa STK Push via LipaWin
 // Callback path: /api/payments/callback  (LipaWin webhook -> confirms & issues tickets)
 // Status polling: /api/payments/status/:sessionId
 
@@ -30,7 +30,7 @@ const TICKET_STYLES = `
 function generateTicketCard(ticket, order, event) {
   return `<div class="ticket">
     <div class="header">
-      <div class="logo">🎫 ZENLIPA TICKET</div>
+      <div class="logo">ðŸŽ« ZENLIPA TICKET</div>
       <div class="event-name">${event.name}</div>
     </div>
     <div class="details">
@@ -104,7 +104,7 @@ const EVENT_DATA = {
   address: 'MAIN CAMPUS, NAIROBI, KENYA',
   description: 'Step into a world where UON IS A COUNTRY. Experience the culture, the energy, and the unity that makes the University of Nairobi a nation within a nation. Join us for an unforgettable celebration of art, culture, and entertainment.',
   status: 'published',
-  banner: 'https://ours.zenlipa.co.ke/events/rc-upload-1789107537914-2-2328773-11535ed5-ef3b-44a0-8a15-b101e5fb7bbc.png',
+  banner: 'https://uon-tickets.vercel.app/poster.jpg',
   organizer: 'Shaif Aol',
   category: 'Arts, Culture & Entertainment',
   attendeesCount: 200,
@@ -390,14 +390,14 @@ function buildTicketEmailHTML(order, event) {
   return `
   <div style="font-family:Arial,sans-serif;max-width:620px;margin:0 auto">
     <div style="background:#ffd100;color:#18181b;border-radius:12px 12px 0 0;padding:24px;text-align:center">
-      <div style="font-size:24px;font-weight:800">🎫 ZENLIPA</div>
+      <div style="font-size:24px;font-weight:800">ðŸŽ« ZENLIPA</div>
       <div style="margin-top:4px;font-weight:bold">Your tickets are confirmed!</div>
     </div>
     <div style="border:1px solid #e4e4e7;border-top:none;border-radius:0 0 12px 12px;padding:24px">
       <p style="margin:0 0 16px;font-size:14px;color:#3f3f46">Hi <strong>${order.customer.name}</strong>, thank you for your payment. Here are your tickets:</p>
       ${ticketsHtml}
       <div style="margin-top:20px;padding:12px;background:#fafafa;border-radius:8px;font-size:13px;color:#71717a">
-        <strong>Order:</strong> ${order.orderNumber} · <strong>Total paid:</strong> KES ${order.total}
+        <strong>Order:</strong> ${order.orderNumber} Â· <strong>Total paid:</strong> KES ${order.total}
       </div>
       <p style="margin:20px 0 0;font-size:12px;color:#9ca3af">Tickets are non-transferable.</p>
     </div>
