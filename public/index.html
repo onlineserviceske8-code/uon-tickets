@@ -87,18 +87,15 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
 .form-group input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font-size:16px;-webkit-appearance:none;appearance:none;background:#fff;color:var(--paragraph);font-family:inherit}
 .form-group input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 2px rgba(155,211,91,.25)}
 .close-btn{position:absolute;top:16px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:var(--paragraph-light)}
-.qty-btn{width:32px;height:32px;border-radius:9999px;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-size:1rem;background:#fff;touch-action:manipulation;cursor:pointer;transition:all .15s}
-.qty-btn:hover{border-color:var(--primary);background:var(--primary-100)}
-.qty-btn:disabled{opacity:.35;cursor:not-allowed}
-.ticket-card{border:1px solid var(--line);border-radius:16px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;transition:all .15s}
-.ticket-row{cursor:pointer;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%}
+.ticket-card{border:1px solid var(--line);border-radius:16px;margin-bottom:10px;background:#fff;padding:14px 16px;transition:all .15s}
 .ticket-card:hover{border-color:var(--primary)}
-.ticket-card.open{border-color:var(--primary);box-shadow:0 0 0 2px rgba(155,211,91,.2)}
+.ticket-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .ticket-price{font-size:1.1rem;font-weight:600;color:var(--paragraph)}
 .ticket-price .cur{font-size:.7rem;font-weight:600;color:var(--paragraph-light);margin-right:2px}
-.ticket-extra{display:none;padding:0 16px 12px;border-top:1px dashed var(--line)}
-.ticket-card.open .ticket-extra{display:block}
-.ticket-extra .tqty{display:flex;align-items:center;gap:10px;margin-top:12px}
+.tqty-line{padding-top:4px}
+.qty-btn{width:32px;height:32px;border-radius:9999px;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-size:1.1rem;background:#fff;touch-action:manipulation;cursor:pointer;transition:all .15s;color:var(--paragraph)}
+.qty-btn:hover{border-color:var(--primary);background:var(--primary-100)}
+.qty-btn:disabled{opacity:.35;cursor:not-allowed}
 .footer-link{position:relative;display:inline-block;overflow:hidden;text-decoration:none;color:var(--paragraph-light);font-size:1rem}
 .footer-link:after{content:"";position:absolute;bottom:0;left:0;height:1px;width:100%;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .5s cubic-bezier(.4,0,.2,1)}
 .footer-link:hover{color:var(--paragraph)}
@@ -139,12 +136,10 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
   </section>
 
   <div class="container-x">
-    <div class="grid gap-10 lg:grid-cols-[1fr_400px]">
+    <div class="mx-auto max-w-4xl">
 
-      <!-- Left column -->
-      <div class="min-w-0">
         <!-- Title block -->
-        <div id="tickets" class="mb-8">
+        <div class="mb-8">
           <span class="badge mb-4">Arts, Culture & Entertainment</span>
           <h1 class="text-4xl md:text-6xl leading-[1.15] mb-2">UON IS A COUNTRY</h1>
           <div class="flex flex-wrap items-center gap-x-6 gap-y-2 text-base text-[color:var(--paragraph-light)] mt-4">
@@ -195,11 +190,9 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Right: Booking / Tickets -->
-      <aside class="lg:self-start lg:sticky lg:top-20" id="tickets">
-        <div class="rounded-3xl border border-[color:var(--line)] bg-white p-6 shadow-xl shadow-zinc-900/5">
+        <!-- Tickets / Booking -->
+        <div id="tickets" class="rounded-3xl border border-[color:var(--line)] bg-white p-6 md:p-8 mt-6 scroll-mt-20">
           <div class="mb-4 flex items-center justify-between">
             <div class="font-ui text-lg font-semibold">Select Tickets</div>
             <span class="badge" style="cursor:default">● Available</span>
@@ -216,7 +209,6 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
             Select Tickets
           </button>
         </div>
-      </aside>
     </div>
   </div>
 </main>
@@ -442,41 +434,31 @@ function renderTickets() {
     const qty = cart[t.id] || 0;
     const remaining = Number(t.quantity) - Number(t.sold);
     const soldOut = remaining <= 0;
-    const open = qty > 0;
+    const rowTotal = qty * Number(t.price);
     return `
-      <div class="ticket-card ${open ? 'open' : ''}">
-        <div class="ticket-row" onclick="toggleExpand('${escHtml(t.id)}')">
+      <div class="ticket-card" data-id="${escHtml(t.id)}">
+        <div class="ticket-row">
           <div class="min-w-0">
             <div class="text-[10px] font-semibold uppercase tracking-widest text-[color:var(--paragraph-light)]">${escHtml(t.type || 'TICKET')}</div>
             <div class="font-ui text-sm font-semibold leading-tight mt-0.5">${escHtml(t.name)}</div>
-            ${soldOut ? '<div class="text-xs text-red-600 mt-0.5">Sold out</div>' : ''}
+            <div class="text-xs text-[color:var(--paragraph-light)] mt-0.5">${soldOut ? 'Sold out' : remaining + ' available'}</div>
           </div>
-          <div class="ticket-price shrink-0 ml-3">${soldOut ? '<span class="text-sm text-red-600">Sold out</span>' : '<span class="cur">KES</span> ' + Number(t.price).toLocaleString()}</div>
+          ${soldOut ? '<div class="text-sm text-red-600 font-semibold shrink-0 ml-3">Sold out</div>' : '' +
+          '<div class="ticket-price shrink-0 ml-3"><span class="cur">KES</span> ' + Number(t.price).toLocaleString() + '</div>'}
         </div>
-        <div class="ticket-extra">
-          <div class="tqty">
-            <span class="text-sm font-medium">Quantity</span>
-            <button aria-label="Decrease" class="qty-btn" onclick="changeQty('${escHtml(t.id)}',-1)">−</button>
-            <span class="w-5 text-center text-sm font-bold">${qty}</span>
-            <button aria-label="Increase" class="qty-btn" onclick="changeQty('${escHtml(t.id)}',1)">+</button>
-            <span class="text-xs text-[color:var(--paragraph-light)] ml-auto">${remaining} available</span>
+        ${soldOut ? '' : `
+        <div class="tqty-line">
+          <div class="flex items-center justify-between border-t border-dashed border-[color:var(--line)] pt-3">
+            <div class="flex items-center gap-2">
+              <button aria-label="Decrease ${escHtml(t.name)}" class="qty-btn" onclick="changeQty('${escHtml(t.id)}',-1)">−</button>
+              <span class="w-6 text-center text-sm font-bold">${qty}</span>
+              <button aria-label="Increase ${escHtml(t.name)}" class="qty-btn" onclick="changeQty('${escHtml(t.id)}',1)">+</button>
+            </div>
+            <div class="text-sm font-semibold text-[color:var(--paragraph)]">${qty > 0 ? 'KES ' + rowTotal.toLocaleString() : 'Select'}</div>
           </div>
-        </div>
+        </div>`}
       </div>`;
   }).join('');
-}
-
-function toggleExpand(typeId) {
-  const tt = eventData.ticketTypes.find(t => t.id === typeId);
-  if (!tt) return;
-  const order = ['students', 'staff', 'vvip'];
-  const cards = [...eventData.ticketTypes].sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
-  const cardEls = document.querySelectorAll('#ticketList .ticket-card');
-  const idx = cards.findIndex(c => c.id === typeId);
-  const card = cardEls[idx];
-  const alreadyOpen = card && card.classList.contains('open');
-  cardEls.forEach(c => c.classList.remove('open'));
-  if (card && !alreadyOpen) card.classList.add('open');
 }
 
 function changeQty(typeId, delta) {
