@@ -38,7 +38,6 @@ function generateTicketCard(ticket, order, event) {
       <div class="detail-row"><span class="label">Ticket ID</span><span class="value">${ticket.id}</span></div>
       <div class="detail-row"><span class="label">Order #</span><span class="value">${order.orderNumber}</span></div>
       <div class="detail-row"><span class="label">Date</span><span class="value">${new Date(event.date).toLocaleDateString('en-KE', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })}</span></div>
-      <div class="detail-row"><span class="label">Time</span><span class="value">${new Date(event.date).toLocaleTimeString('en-KE', { hour: '2-digit', minute: '2-digit' })}</span></div>
       <div class="detail-row"><span class="label">Venue</span><span class="value">${event.venue}</span></div>
       <div class="detail-row"><span class="label">Attendee</span><span class="value">${order.customer.name}</span></div>
       <div class="detail-row"><span class="label">Email</span><span class="value">${order.customer.email}</span></div>
@@ -379,7 +378,6 @@ function buildTicketEmailHTML(order, event) {
         <tr><td style="padding:3px 0;color:#71717a">Ticket ID</td><td style="text-align:right;font-weight:bold">${t.id}</td></tr>
         <tr><td style="padding:3px 0;color:#71717a">Order</td><td style="text-align:right;font-weight:bold">${order.orderNumber}</td></tr>
         <tr><td style="padding:3px 0;color:#71717a">Date</td><td style="text-align:right;font-weight:bold">${d.toDateString()}</td></tr>
-        <tr><td style="padding:3px 0;color:#71717a">Time</td><td style="text-align:right;font-weight:bold">${d.toLocaleTimeString()}</td></tr>
         <tr><td style="padding:3px 0;color:#71717a">Venue</td><td style="text-align:right;font-weight:bold">${event.venue}</td></tr>
         <tr><td style="padding:3px 0;color:#71717a">Attendee</td><td style="text-align:right;font-weight:bold">${order.customer.name}</td></tr>
       </table>
