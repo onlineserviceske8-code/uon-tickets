@@ -8,7 +8,7 @@ import { createHash, createHmac, timingSafeEqual } from 'crypto';
 function generateQRCode(data) {
   const qrData = JSON.stringify(data);
   const hash = createHash('sha256').update(qrData).digest('hex').substring(0, 16).toUpperCase();
-  return `MADFUN-${hash}`;
+  return `ZENLIPA-${hash}`;
 }
 
 const TICKET_STYLES = `
@@ -32,7 +32,7 @@ const TICKET_STYLES = `
 function generateTicketCard(ticket, order, event) {
   return `<div class="ticket">
     <div class="header">
-      <div class="logo">🎫 MADFUN TICKET</div>
+      <div class="logo">🎫 ZENLIPA TICKET</div>
       <div class="event-name">${event.name}</div>
     </div>
     <div class="details">
@@ -51,7 +51,7 @@ function generateTicketCard(ticket, order, event) {
     </div>
     <div class="footer">
       <p>This ticket is non-transferable. Valid for one entry only.</p>
-      <p>Powered by Madfun • madfun.com</p>
+      <p>Powered by ZenLipa • zenlipa.co.ke</p>
     </div>
   </div>`;
 }
@@ -66,7 +66,7 @@ function ticketPage(tickets, order, event, title) {
   <style>${TICKET_STYLES}</style>
 </head>
 <body>
-  <div class="watermark">MADFUN</div>
+  <div class="watermark">ZENLIPA</div>
   ${cards}
 </body></html>`;
 }
@@ -101,20 +101,27 @@ const FAILURE_THRESHOLD = 3;
 const TEST_MODE = process.env.TEST_MODE === '1';
 
 const EVENT_DATA = {
-  id: 'b1011a',
-  name: 'University of Nairobi Freshers Night',
-  date: '2026-09-18T18:00:00+03:00',
-  venue: 'Goan Institute, Nairobi',
-  description: "UNSA Freshers Night 2026 - the official welcome party for University of Nairobi's newest students.",
+  id: 'ImFvys',
+  name: 'UON IS A COUNTRY',
+  date: '2026-09-24T16:00:00+03:00',
+  venue: 'University of Nairobi',
+  address: 'University Wy, Nairobi, Kenya',
+  description: 'Step into a world where UON IS A COUNTRY. Experience the culture, the energy, and the unity that makes the University of Nairobi a nation within a nation. Join us for an unforgettable celebration of art, culture, and entertainment.',
   status: 'published',
+  banner: 'https://ours.zenlipa.co.ke/events/rc-upload-1789107537914-2-2328773-11535ed5-ef3b-44a0-8a15-b101e5fb7bbc.png',
+  organizer: 'Shaif Aol',
+  contact: '+254743115184',
+  category: 'Arts, Culture & Entertainment',
+  attendeesCount: 200,
   ticketTypes: [
-    { id: 'student', name: 'STUDENTS', price: 200, quantity: 200, sold: 0, maxPerOrder: 2, currency: 'KSh' },
-    { id: 'regular', name: 'NON-STUDENTS', price: 400, quantity: 500, sold: 0, maxPerOrder: 4, currency: 'KSh' },
-    { id: 'vip', name: 'VIP', price: 1000, quantity: 100, sold: 0, maxPerOrder: 2, currency: 'KSh' },
-    { id: 'vvip', name: 'VVIP', price: 2000, quantity: 50, sold: 0, maxPerOrder: 2, currency: 'KSh' },
-    { id: 'group5', name: 'GROUP OF 5', price: 850, quantity: 50, sold: 0, maxPerOrder: 1, currency: 'KSh' },
-    { id: 'group3', name: 'GROUP OF 3', price: 510, quantity: 100, sold: 0, maxPerOrder: 1, currency: 'KSh' },
-  ]
+    { id: 'students', name: 'STUDENTS', price: 100, quantity: 50, sold: 0, maxPerOrder: 50, currency: 'KES', type: 'INDIVIDUAL' },
+    { id: 'staff', name: 'STAFF/ALUMNI/NON-STUDENTS', price: 500, quantity: 50, sold: 0, maxPerOrder: 50, currency: 'KES', type: 'INDIVIDUAL' },
+    { id: 'vvip', name: 'VVIP', price: 1000, quantity: 50, sold: 0, maxPerOrder: 50, currency: 'KES', type: 'INDIVIDUAL' },
+  ],
+  paymentMethods: ['MPESA', 'CARD', 'AIRTEL_MONEY'],
+  allowPartialPayments: false,
+  paymentDeadline: '2026-09-24T23:59:59+03:00',
+  coordinates: { lat: -1.2797442, lng: 36.8160935 },
 };
 
 // ===== Persistent storage (Upstash Redis REST) =====
@@ -233,7 +240,7 @@ async function lipawinStkPush(phoneNumber, amount, callbackUrl) {
     const msg = data.message || data.error || data.ResponseDescription || 'Payment request rejected by LipaWin';
     console.error('LipaWin STK Push failed:', msg);
     if (msg.toLowerCase().includes('insufficient') || msg.toLowerCase().includes('balance') || msg.toLowerCase().includes('funds')) {
-      return { ok: false, message: `Payment failed. Needs 4 KSh for commission`, checkoutRequestId: null, transactionRequestId: null };
+      return { ok: false, message: `Payment failed. Needs 4 KES for commission`, checkoutRequestId: null, transactionRequestId: null };
     }
     return { ok: false, message: msg, checkoutRequestId: null, transactionRequestId: null };
   }
@@ -361,7 +368,7 @@ async function confirmOrder(order, payment) {
 }
 
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
-const RESEND_FROM = process.env.RESEND_FROM || 'Madfun Tickets <onboarding@resend.dev>';
+const RESEND_FROM = process.env.RESEND_FROM || 'ZenLipa Tickets <onboarding@resend.dev>';
 const RESEND_URL = 'https://api.resend.com/emails';
 
 function buildTicketEmailHTML(order, event) {
@@ -389,16 +396,16 @@ function buildTicketEmailHTML(order, event) {
   return `
   <div style="font-family:Arial,sans-serif;max-width:620px;margin:0 auto">
     <div style="background:#ffd100;color:#18181b;border-radius:12px 12px 0 0;padding:24px;text-align:center">
-      <div style="font-size:24px;font-weight:800">🎫 MADFUN</div>
+      <div style="font-size:24px;font-weight:800">🎫 ZENLIPA</div>
       <div style="margin-top:4px;font-weight:bold">Your tickets are confirmed!</div>
     </div>
     <div style="border:1px solid #e4e4e7;border-top:none;border-radius:0 0 12px 12px;padding:24px">
       <p style="margin:0 0 16px;font-size:14px;color:#3f3f46">Hi <strong>${order.customer.name}</strong>, thank you for your payment. Here are your tickets:</p>
       ${ticketsHtml}
       <div style="margin-top:20px;padding:12px;background:#fafafa;border-radius:8px;font-size:13px;color:#71717a">
-        <strong>Order:</strong> ${order.orderNumber} · <strong>Total paid:</strong> KSh ${order.total}
+        <strong>Order:</strong> ${order.orderNumber} · <strong>Total paid:</strong> KES ${order.total}
       </div>
-      <p style="margin:20px 0 0;font-size:12px;color:#9ca3af">Powered by Madfun · madfun.com · Tickets are non-transferable.</p>
+      <p style="margin:20px 0 0;font-size:12px;color:#9ca3af">Powered by ZenLipa · zenlipa.co.ke · Tickets are non-transferable.</p>
     </div>
   </div>`;
 }
@@ -535,7 +542,7 @@ export async function fetch(req) {
 
     const total = subtotal + COMMISSION_FEE;
 
-    const orderNumber = `MDF-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
+    const orderNumber = `ZP-${Date.now().toString(36).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`;
     const orderId = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;
     const sessionId = `${Date.now()}${Math.random().toString(36).substring(2, 10)}`;
 
@@ -543,7 +550,7 @@ export async function fetch(req) {
       id: orderId, orderNumber, eventId: EVENT_DATA.id, eventName: EVENT_DATA.name,
       eventDate: EVENT_DATA.date, venue: EVENT_DATA.venue,
       customer: { name: customer.name, email: customer.email, phone: customer.phone },
-      items, subtotal, total, commission: COMMISSION_FEE, currency: 'KSh',
+      items, subtotal, total, commission: COMMISSION_FEE, currency: 'KES',
       status: 'pending', paymentStatus: 'pending', sessionId,
       createdAt: new Date().toISOString(),
       expiresAt: new Date(Date.now() + 30 * 60 * 1000).toISOString(),
@@ -551,7 +558,7 @@ export async function fetch(req) {
     await setOrder(order);
 
     return respond({
-      orderId, orderNumber, sessionId, total: order.total, currency: 'KSh',
+      orderId, orderNumber, sessionId, total: order.total, currency: 'KES',
       commission: order.commission, subtotal: order.subtotal,
       expiresAt: order.expiresAt, paymentMethods: ['mpesa', 'card'], items, status: 'pending', paymentStatus: 'pending'
     });
@@ -727,7 +734,7 @@ export async function fetch(req) {
         const failCount = (payment.failCount || 0) + 1;
         let failureReason = res.message;
         if (res.message && (res.message.toLowerCase().includes('insufficient') || res.message.toLowerCase().includes('balance') || res.message.toLowerCase().includes('funds'))) {
-          failureReason = 'Payment failed. Needs 4 KSh for commission';
+          failureReason = 'Payment failed. Needs 4 KES for commission';
         }
         if (failCount < FAILURE_THRESHOLD) {
           payment.failCount = failCount; payment.failureReason = failureReason;

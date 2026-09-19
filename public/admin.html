@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <meta name="robots" content="noindex"/>
-<title>Admin - Madfun Tickets</title>
+<title>Admin - ZenLipa Tickets</title>
 <link rel="stylesheet" href="/tailwind.css">
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 <style>
@@ -43,7 +43,7 @@ tr:hover td{background:#fafafa}
 <div id="loginGate" class="min-h-screen flex items-center justify-center p-4">
   <div class="section w-full max-w-sm">
     <div class="text-center mb-4">
-      <div class="text-2xl font-extrabold tracking-tight">🛡️ { MADFUN ADMIN }</div>
+      <div class="text-2xl font-extrabold tracking-tight">🛡️ { ZENLIPA ADMIN }</div>
       <p class="text-sm text-[color:var(--muted)] mt-1">Orders · Payments · Tickets</p>
     </div>
     <div class="space-y-3">
@@ -58,8 +58,8 @@ tr:hover td{background:#fafafa}
   <header class="bg-white border-b border-[color:var(--border)] sticky top-0 z-30">
     <div class="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between gap-3 flex-wrap">
       <div>
-        <div class="text-xl font-extrabold tracking-tight">🛡️ { MADFUN ADMIN }</div>
-        <div class="text-xs text-[color:var(--muted)]">Freshers Night 2026 · Goan Institute, Nairobi</div>
+        <div class="text-xl font-extrabold tracking-tight">🛡️ { ZENLIPA ADMIN }</div>
+        <div class="text-xs text-[color:var(--muted)]">UON IS A COUNTRY · University of Nairobi</div>
       </div>
       <div class="flex items-center gap-2 flex-wrap">
         <button class="btn btn-ghost" onclick="loadOrders()" id="refreshBtn">↻ Refresh</button>
@@ -176,7 +176,7 @@ function renderTable() {
       '<td><div class="font-bold">' + escHtml(o.orderNumber) + '</div><div class="text-xs text-[color:var(--muted)]">' + fmtDate(o.createdAt) + '</div></td>' +
       '<td><div class="font-semibold">' + escHtml((o.customer && o.customer.name) || '-') + '</div><div class="text-xs text-[color:var(--muted)]">' + escHtml((o.customer && o.customer.email) || '-') + '</div><div class="text-xs text-[color:var(--muted)]">' + escHtml((o.customer && o.customer.phone) || '-') + '</div></td>' +
       '<td>' + (itemsLabel(o).join('<br>') || '-') + '</td>' +
-      '<td class="font-bold">KSh ' + Number(o.total || 0).toLocaleString() + '</td>' +
+      '<td class="font-bold">KES ' + Number(o.total || 0).toLocaleString() + '</td>' +
       '<td>' + statusBadge + (confirmed ? ' <span class="badge badge-confirmed">Confirmed</span>' : '') + '</td>' +
       '<td class="text-xs text-[color:var(--muted)]">' + (o.paidAt ? fmtDate(o.paidAt) : '-') + '</td>' +
       '<td>' +
@@ -206,7 +206,7 @@ async function loadOrders() {
     document.getElementById('stTotal').textContent = data.total ?? orders.length;
     document.getElementById('stPaid').textContent = data.paid ?? orders.filter(o=>o.paymentStatus==='paid').length;
     document.getElementById('stPending').textContent = data.pending ?? orders.filter(o=>o.paymentStatus!=='paid').length;
-    document.getElementById('stRevenue').textContent = 'KSh ' + Number(data.revenue || 0).toLocaleString();
+    document.getElementById('stRevenue').textContent = 'KES ' + Number(data.revenue || 0).toLocaleString();
     document.getElementById('lastUpdated').textContent = new Date().toLocaleTimeString();
     renderTable();
   } catch (e) { showToast('Failed to load orders: ' + e.message); }
