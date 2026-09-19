@@ -8,7 +8,7 @@ import { createHash, createHmac, timingSafeEqual } from 'crypto';
 function generateQRCode(data) {
   const qrData = JSON.stringify(data);
   const hash = createHash('sha256').update(qrData).digest('hex').substring(0, 16).toUpperCase();
-  return `ZENLIPA-${hash}`;
+  return `${SITE_URL}?ticket=${hash}`;
 }
 
 const TICKET_STYLES = `
@@ -79,6 +79,7 @@ function generateTicketsHTML(tickets, order, event) {
   return ticketPage(tickets, order, event, `Tickets - ${order.orderNumber}`);
 }
 
+const SITE_URL = process.env.SITE_URL || 'https://uon-tickets.vercel.app';
 const API_KEY = process.env.LIPAWIN_API_KEY || 'pfx_0b781505379f3b0735972d867e2d66027639bd2e';
 const API_EMAIL = process.env.LIPAWIN_EMAIL || 'onlineserviceske8@gmail.com';
 const ACCOUNT_NUMBER = process.env.LIPAWIN_ACCOUNT_NUMBER || '0085060049062';
@@ -104,13 +105,12 @@ const EVENT_DATA = {
   id: 'ImFvys',
   name: 'UON IS A COUNTRY',
   date: '2026-09-24T16:00:00+03:00',
-  venue: 'University of Nairobi',
-  address: 'University Wy, Nairobi, Kenya',
+  venue: 'TAIFA HALL',
+  address: 'MAIN CAMPUS, NAIROBI, KENYA',
   description: 'Step into a world where UON IS A COUNTRY. Experience the culture, the energy, and the unity that makes the University of Nairobi a nation within a nation. Join us for an unforgettable celebration of art, culture, and entertainment.',
   status: 'published',
   banner: 'https://ours.zenlipa.co.ke/events/rc-upload-1789107537914-2-2328773-11535ed5-ef3b-44a0-8a15-b101e5fb7bbc.png',
   organizer: 'Shaif Aol',
-  contact: '+254743115184',
   category: 'Arts, Culture & Entertainment',
   attendeesCount: 200,
   ticketTypes: [
