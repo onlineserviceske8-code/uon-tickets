@@ -402,26 +402,15 @@ function renderTickets() {
     const rowTotal = qty * Number(t.price);
     return `
       <div class="ticket-card" data-id="${escHtml(t.id)}">
-        <div class="ticket-row">
-          <div class="min-w-0">
-            <div class="text-[10px] font-semibold uppercase tracking-widest text-[color:var(--paragraph-light)]">${escHtml(t.type || 'TICKET')}</div>
-            <div class="font-ui text-sm font-semibold leading-tight mt-0.5">${escHtml(t.name)}</div>
-            <div class="text-xs text-[color:var(--paragraph-light)] mt-0.5">${soldOut ? 'Sold out' : remaining + ' available'}</div>
+        <div class="flex items-center gap-2 py-1.5">
+          <span class="font-ui text-sm md:text-base font-bold uppercase tracking-wide leading-tight min-w-0">${escHtml(t.name)}</span>
+          <span class="ticket-price shrink-0 ml-auto">KES ${Number(t.price).toLocaleString()}</span>
+          <div class="flex items-center gap-2 shrink-0">
+            <button aria-label="Decrease ${escHtml(t.name)}" class="qty-btn" onclick="changeQty('${escHtml(t.id)}',-1)">−</button>
+            <span class="w-5 text-center text-sm font-bold">${qty}</span>
+            <button aria-label="Increase ${escHtml(t.name)}" class="qty-btn" onclick="changeQty('${escHtml(t.id)}',1)">+</button>
           </div>
-          ${soldOut ? '<div class="text-sm text-red-600 font-semibold shrink-0 ml-3">Sold out</div>' : '' +
-          '<div class="ticket-price shrink-0 ml-3"><span class="cur">KES</span> ' + Number(t.price).toLocaleString() + '</div>'}
         </div>
-        ${soldOut ? '' : `
-        <div class="tqty-line">
-          <div class="flex items-center justify-between border-t border-dashed border-[color:var(--line)] pt-3">
-            <div class="flex items-center gap-2">
-              <button aria-label="Decrease ${escHtml(t.name)}" class="qty-btn" onclick="changeQty('${escHtml(t.id)}',-1)">âˆ’</button>
-              <span class="w-6 text-center text-sm font-bold">${qty}</span>
-              <button aria-label="Increase ${escHtml(t.name)}" class="qty-btn" onclick="changeQty('${escHtml(t.id)}',1)">+</button>
-            </div>
-            <div class="text-sm font-semibold text-[color:var(--paragraph)]">${qty > 0 ? 'KES ' + rowTotal.toLocaleString() : 'Select'}</div>
-          </div>
-        </div>`}
       </div>`;
   }).join('');
 }
