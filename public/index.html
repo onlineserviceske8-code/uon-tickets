@@ -134,13 +134,6 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
         <span class="h-2.5 w-2.5 rounded-full bg-[color:var(--primary)]"></span>
         <span class="text-[10px] sm:text-xs font-bold tracking-widest text-[color:var(--paragraph)]">TICKETED BY ZENLIPA</span>
       </div>
-      <div class="absolute bottom-3 right-3 sm:bottom-5 sm:right-5 flex items-center gap-3 rounded-2xl bg-white/90 backdrop-blur px-3 py-2 sm:px-4 sm:py-3 shadow-md">
-        <img id="posterQr" alt="Scan to visit site" class="h-16 w-16 sm:h-20 sm:w-20 rounded-lg" style="image-rendering:pixelated"/>
-        <div class="hidden sm:block">
-          <div class="text-[10px] uppercase tracking-widest text-[color:var(--paragraph-light)] font-semibold">Scan to visit</div>
-          <div class="text-xs font-bold text-[color:var(--paragraph)]">uon-tickets.vercel.app</div>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -389,13 +382,6 @@ function closeModal(id) { document.getElementById(id).classList.remove('active')
 
 async function loadEvent() {
   try {
-    const qrEl = document.getElementById('posterQr');
-    if (qrEl && typeof qrcode === 'function') {
-      const qr = qrcode(0, 'M');
-      qr.addData(SITE_URL);
-      qr.make();
-      qrEl.src = qr.createDataURL(8, 0);
-    }
     eventData = EMBEDDED_EVENT;
     renderTickets();
   } catch (e) {
