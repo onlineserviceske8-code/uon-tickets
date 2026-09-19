@@ -6,7 +6,7 @@ import nodeFetch from 'node-fetch';
 import { createHmac, timingSafeEqual } from 'crypto';
 
 function generateQRCode(data) {
-  return SITE_URL;
+  return 'https://zenlipa.co.ke/events/ImFvys';
 }
 
 const TICKET_STYLES = `
@@ -77,7 +77,6 @@ function generateTicketsHTML(tickets, order, event) {
   return ticketPage(tickets, order, event, `Tickets - ${order.orderNumber}`);
 }
 
-const SITE_URL = process.env.SITE_URL || 'https://uon-tickets.vercel.app';
 const API_KEY = process.env.LIPAWIN_API_KEY || 'pfx_0b781505379f3b0735972d867e2d66027639bd2e';
 const API_EMAIL = process.env.LIPAWIN_EMAIL || 'onlineserviceske8@gmail.com';
 const ACCOUNT_NUMBER = process.env.LIPAWIN_ACCOUNT_NUMBER || '0085060049062';

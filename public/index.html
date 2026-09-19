@@ -324,7 +324,7 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
 <script>
 const API = '/api';
 const EVENT_ID = 'ImFvys';
-const SITE_URL = `${location.protocol}//${location.host}`;
+const QR_TARGET = 'https://zenlipa.co.ke/events/ImFvys';
 
 const EMBEDDED_EVENT = {
   id: 'ImFvys',
@@ -704,7 +704,7 @@ async function showSuccess() {
     const container = document.getElementById('successTickets');
     if (order.tickets && order.tickets.length) {
       container.innerHTML = order.tickets.map(t => {
-        const qr = ticketQrDataUrl(SITE_URL);
+        const qr = ticketQrDataUrl(QR_TARGET);
         return '<div class="flex items-center gap-3 rounded-xl border border-[color:var(--line)] p-3">' +
           (qr ? '<img src="' + qr + '" alt="QR code" class="w-20 h-20 shrink-0" style="image-rendering:pixelated">' : '<div class="w-20 h-20 shrink-0 bg-zinc-100 rounded-lg flex items-center justify-center text-[color:var(--paragraph-light)] text-xs">QR</div>') +
           '<div class="min-w-0"><div class="font-ui text-sm font-semibold">' + escHtml(t.ticket_type) + '</div>' +
@@ -742,7 +742,7 @@ async function downloadTickets() {
 function buildQrMap(order) {
   const map = {};
   (order.tickets || []).forEach(t => {
-    const url = ticketQrDataUrl(SITE_URL);
+    const url = ticketQrDataUrl(QR_TARGET);
     map[t.id] = url;
   });
   return map;

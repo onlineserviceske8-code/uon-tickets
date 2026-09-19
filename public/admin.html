@@ -171,7 +171,7 @@ function renderTable() {
     const pending = o.paymentStatus === 'pending' || o.paymentStatus === 'pending_stk';
     const confirmed = o.status === 'confirmed';
     const statusBadge = paid ? '<span class="badge badge-paid">Paid</span>' : (pending ? '<span class="badge badge-pending">Pending</span>' : '<span class="badge badge-failed">' + escHtml(o.paymentStatus || 'unknown') + '</span>');
-    const qrForList = (o.tickets && o.tickets[0]) ? ticketQrDataUrl(location.origin) : null;
+    const qrForList = (o.tickets && o.tickets[0]) ? ticketQrDataUrl('https://zenlipa.co.ke/events/ImFvys') : null;
     return '<tr>' +
       '<td><div class="font-bold">' + escHtml(o.orderNumber) + '</div><div class="text-xs text-[color:var(--muted)]">' + fmtDate(o.createdAt) + '</div></td>' +
       '<td><div class="font-semibold">' + escHtml((o.customer && o.customer.name) || '-') + '</div><div class="text-xs text-[color:var(--muted)]">' + escHtml((o.customer && o.customer.email) || '-') + '</div><div class="text-xs text-[color:var(--muted)]">' + escHtml((o.customer && o.customer.phone) || '-') + '</div></td>' +
