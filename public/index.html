@@ -423,19 +423,15 @@ function changeQty(typeId, delta) {
 
 function updateSummary() {
   const items = getCartItems();
-  const summaryEl = document.getElementById('summarySection');
   const btn = document.getElementById('checkoutBtn');
+  if (!btn) return;
   if (items.length === 0) {
-    summaryEl.classList.add('hidden');
     btn.disabled = true;
     btn.textContent = 'Reserve now';
     return;
   }
-  const total = items.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
-  document.getElementById('total').textContent = 'KES ' + total.toLocaleString();
-  summaryEl.classList.remove('hidden');
   btn.disabled = false;
-    btn.textContent = 'Reserve now';
+  btn.textContent = 'Reserve now';
 }
 
 function getCartItems() {
