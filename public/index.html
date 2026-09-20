@@ -259,6 +259,10 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
             <div class="payment-method" onclick="selectPayment('CARD')" id="payCARD_small"><span class="mr-2 font-bold text-[color:var(--primary)]">CARD</span> <span class="ml-auto text-xs text-[color:var(--paragraph-light)]">Fast & Secure</span></div>
             <p class="text-xs text-[color:var(--paragraph-light)] mt-3">You will receive an <strong>STK prompt</strong> on your phone to complete the payment.</p>
           </div>
+          <label class="flex items-start gap-2 cursor-pointer mt-4" title="I agree to the Event Ticket Policy and understand my ticket order will be recorded against this transaction.">
+            <input type="checkbox" id="araiConsent" class="mt-0.5 accent-[color:var(--primary)]" style="accent-color:var(--primary)">
+            <span class="text-xs text-[color:var(--paragraph-light)] leading-relaxed">I have read and agree to the <strong class="text-[color:var(--paragraph)]">Event Ticket Policy</strong>, and I consent to this booking being <strong class="text-[color:var(--paragraph)]">recorded in the event logs</strong> (name, email, phone, tickets, amount payable). By continuing, you authorise the transaction prompt on the number provided.</span>
+          </label>
           <button class="btn w-full" onclick="submitOrder()" id="submitOrderBtn" style="width:100%"><span class="mr-2">&#10148;</span>Continue to Payment</button>
           <p class="text-xs text-[color:var(--paragraph-light)] text-center mt-3">You'll receive your tickets instantly by email &amp; SMS after payment.</p>
         </div>
@@ -432,9 +436,46 @@ function changeQty(typeId, delta) {
   updateSummary();
 }
 
+const araiConsentKey = 'arai_consent_v1';
+const araiLogKey = 'arai_tx_log_v1';
+
+function logConsentGrant(name, email, phone) {
+  const rec = {
+    key: araiConsentKey,
+    grantedAt: new Date().toISOString(),
+    grantee: { name, email, phone },
+    eventId: EVENT_ID,
+    eventName: eventData && eventData.name ? eventData.name : (EVENT_NAME || 'UON IS A COUNTRY'),
+    version: 'v1'
+  };
+  try { localStorage.setItem(araiConsentKey, JSON.stringify(rec)); } catch (e) {}
+  return rec;
+}
+
+function logOrderTransaction(step, order, items) {
+  const tn = (order && (order.transactionId || order.orderNumber)) || ('TXN-' + Date.now().toString(36).toUpperCase());
+  const total = (order && Number(order.total)) || (items || []).reduce((s, i) => s + Number(i.unitPrice || 0) * Number(i.quantity || 0), 0);
+  const row = {
+    tx: tn,
+    ts: new Date().toISOString(),
+    step: step,
+    eventId: EVENT_ID,
+    items: (items || []).map(i => ({ name: i.name || i.typeName, qty: Number(i.quantity || 0), unit: Number(i.unitPrice || i.price || 0) })),
+    totalKES: total,
+    consentStored: (function () { try { return !!(localStorage.getItem(araiConsentKey)); } catch (e) { return false; } })()
+  };
+  try {
+    const prev = JSON.parse(localStorage.getItem(araiLogKey) || '[]');
+    prev.push(row);
+    localStorage.setItem(araiLogKey, JSON.stringify(prev));
+  } catch (e) {}
+  const line = '[TICKET-CONSENT v1] ' + row.ts + ' | tx ' + tn + ' | step ' + step + ' | consent=' + row.consentStored + ' | total KES ' + total.toLocaleString() + ' | event ' + EVENT_ID;
+  try { if (window.console) console.info(line); } catch (e) {}
+  return tn;
+}
+
 function updateSummary() {
-  const items = getCartItems();
-  const btn = document.getElementById('checkoutBtn');
+  const items = getCartItems();  const btn = document.getElementById('checkoutBtn');
   if (!btn) return;
   if (items.length === 0) {
     btn.disabled = true;
@@ -472,6 +513,9 @@ async function submitOrder() {
   const phone = document.getElementById('custPhone').value.trim();
   if (!name || !email || !phone) { showToast('Please fill in all fields'); return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('Please enter a valid email'); return; }
+  const consent = document.getElementById('araiConsent');
+  if (!consent || !consent.checked) { showToast('Please accept the agreement to continue'); return; }
+  try { localStorage.setItem('arai_consent_v1', JSON.stringify({ agreedAt: Date.now(), agreedBy: name, email: email, phone: phone })); } catch (e) {}
   const btn = document.getElementById('submitOrderBtn');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Creating order...';
   showLoading('Creating your order...');
@@ -479,6 +523,7 @@ async function submitOrder() {
     const items = getCartItems().map(i => ({ typeId: i.typeId, quantity: i.quantity }));
     const result = await apiFetch('/checkout/initiate', { method: 'POST', body: JSON.stringify({ eventId: EVENT_ID, tickets: items, customer: { name, email, phone: '254' + phone.slice(1) } }) });
     currentOrder = result;
+    logOrderTransaction('initiate', result, items);
     closeModal('checkoutModal');
     showPayment(currentOrder);
   } catch (e) { showToast('Checkout failed: ' + e.message); }
