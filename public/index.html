@@ -85,15 +85,17 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
 .form-group input{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font-size:16px;-webkit-appearance:none;appearance:none;background:#fff;color:var(--paragraph);font-family:inherit}
 .form-group input:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 2px rgba(155,211,91,.25)}
 .close-btn{position:absolute;top:16px;right:16px;background:none;border:none;font-size:24px;cursor:pointer;color:var(--paragraph-light)}
-.ticket-card{border:1px solid var(--line);border-radius:16px;margin-bottom:10px;background:#fff;padding:14px 16px;transition:all .15s}
-.ticket-card:hover{border-color:var(--primary)}
+.ticket-card{border:0;border-radius:12px;margin-bottom:0;background:transparent;padding:16px 6px;transition:background .15s}
+.ticket-card:hover{background:rgba(255,255,255,.04)}
 .ticket-row{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.ticket-price{font-size:1.1rem;font-weight:600;color:var(--paragraph)}
+.ticket-price{font-size:1.05rem;font-weight:600;color:var(--paragraph)}
 .ticket-price .cur{font-size:.7rem;font-weight:600;color:var(--paragraph-light);margin-right:2px}
 .tqty-line{padding-top:4px}
-.qty-btn{width:32px;height:32px;border-radius:9999px;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-size:1.1rem;background:#fff;touch-action:manipulation;cursor:pointer;transition:all .15s;color:var(--paragraph)}
-.qty-btn:hover{border-color:var(--primary);background:var(--primary-100)}
-.qty-btn:disabled{opacity:.35;cursor:not-allowed}
+.qty-val{min-width:30px;text-align:center;font-size:1.15rem;font-weight:700;color:#FFFFFF}
+.qty-btn{width:56px;height:56px;border-radius:9999px;border:0;display:inline-flex;align-items:center;justify-content:center;font-size:1.75rem;line-height:1;font-weight:600;background:#3F4045;color:var(--primary);touch-action:manipulation;cursor:pointer;transition:all .15s;-webkit-tap-highlight-color:transparent}
+.qty-btn:hover{background:#4c4e57}
+.qty-btn:active{transform:scale(.94)}
+.qty-btn:disabled{opacity:.35;cursor:not-allowed;background:transparent;color:var(--paragraph-light)}
 .footer-link{position:relative;display:inline-block;overflow:hidden;text-decoration:none;color:var(--paragraph-light);font-size:1rem}
 .footer-link:after{content:"";position:absolute;bottom:0;left:0;height:1px;width:100%;background:currentColor;transform:scaleX(0);transform-origin:right;transition:transform .5s cubic-bezier(.4,0,.2,1)}
 .footer-link:hover{color:var(--paragraph)}
@@ -152,7 +154,7 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
         <!-- Tickets / Booking -->
         <div id="tickets" class="rounded-3xl border border-[color:var(--line)] bg-[color:var(--card)] p-3 md:p-4 mb-6 scroll-mt-20">
 
-          <h2 class="font-display text-2xl font-semibold mb-6">Tickets Available</h2>
+          <h2 class="font-display text-xl md:text-2xl font-semibold mb-6">Tickets Available</h2>
           <div id="ticketList"></div>
 
           <button class="btn w-full mt-4" id="checkoutBtn" disabled onclick="openCheckout()" style="width:100%">
@@ -395,12 +397,12 @@ function renderTickets() {
     const rowTotal = qty * Number(t.price);
     return `
       <div class="ticket-card" data-id="${escHtml(t.id)}">
-        <div class="flex items-center gap-2 py-1.5">
+        <div class="flex items-center gap-3">
           <span class="font-ui text-sm md:text-base font-bold uppercase tracking-wide leading-tight min-w-0">${escHtml(t.name)}</span>
-          <span class="ticket-price shrink-0 ml-auto">KES ${Number(t.price).toLocaleString()}</span>
-          <div class="flex items-center gap-2 shrink-0">
+          <span class="ticket-price shrink-0">KES ${Number(t.price).toLocaleString()}</span>
+          <div class="ml-auto flex items-center gap-3 shrink-0">
             <button aria-label="Decrease ${escHtml(t.name)}" class="qty-btn" onclick="changeQty('${escHtml(t.id)}',-1)">−</button>
-            <span class="w-5 text-center text-sm font-bold">${qty}</span>
+            <span class="qty-val">${qty}</span>
             <button aria-label="Increase ${escHtml(t.name)}" class="qty-btn" onclick="changeQty('${escHtml(t.id)}',1)">+</button>
           </div>
         </div>
