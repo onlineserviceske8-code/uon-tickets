@@ -49,7 +49,7 @@
 <style>
 :root{--primary:#9BD35B;--primary-100:#F3F8E8;--primary-400:#18181B;--primary-dark:#164418;--primary:#9BD35B;--paragraph:#FFFFFF;--paragraph-light:#D4D4D8;--line:#27272A;--bg:#000000;--bg-soft:#000000;--card:#000000;--btn-hover:#22c55e;--glass-bg:rgba(0,0,0,.88);--glass-line:rgba(255,255,255,.08)}
 html{scroll-behavior:smooth;line-height:1.5}
-body{font-family:'Jost','Plus Jakarta Sans',Inter,system-ui,sans-serif;color:var(--paragraph);background:var(--bg);margin:0;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body{font-family:'Plus Jakarta Sans',Inter,system-ui,sans-serif;color:var(--paragraph);background:var(--bg);margin:0;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
 .font-ui{font-family:'Plus Jakarta Sans',Inter,system-ui,sans-serif}
 .container-x{margin:0 auto;width:100%;max-width:1290px;padding:0 20px}
@@ -233,24 +233,28 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
 <div class="modal-overlay" id="checkoutModal">
   <div class="modal">
     <button class="close-btn" onclick="closeModal('checkoutModal')">&times;</button>
-    <h2 class="font-display text-2xl font-semibold mb-1">Complete Booking</h2>
-    <p class="text-sm text-[color:var(--paragraph-light)] mb-4">Enter your details to continue.</p>
-    <div id="checkoutSummary"></div>
-    <div class="mt-4">
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" id="custName" placeholder="John Doe" required>
-      </div>
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" id="custEmail" placeholder="john@example.com" required>
-      </div>
-      <div class="form-group">
-        <label>Phone Number</label>
-        <input type="tel" id="custPhone" placeholder="0712345678" required>
-      </div>
-      <button class="btn w-full" onclick="submitOrder()" id="submitOrderBtn" style="width:100%">Continue to Payment</button>
-    </div>
+        <div class="mb-4 pb-4 border-b border-[color:var(--line)]">
+          <div class="text-xs uppercase tracking-widest font-semibold text-[color:var(--primary)] mb-1">Checkout · Step 1 of 2</div>
+          <h2 class="font-display text-2xl font-semibold mb-1">Continue to Payment</h2>
+          <p class="text-sm text-[color:var(--paragraph-light)]">Fill in your ticket holder details below — all fields are required.</p>
+        </div>
+        <div id="checkoutSummary"></div>
+        <div class="mt-4">
+          <div class="form-group">
+            <label for="custName">Full Name <span class="text-[color:var(--primary)]">*</span></label>
+            <input type="text" id="custName" placeholder="John Doe" autocomplete="name" required>
+          </div>
+          <div class="form-group">
+            <label for="custEmail">Email Address <span class="text-[color:var(--primary)]">*</span></label>
+            <input type="email" id="custEmail" placeholder="john@example.com" autocomplete="email" required>
+          </div>
+          <div class="form-group">
+            <label for="custPhone">Phone Number <span class="text-[color:var(--primary)]">*</span></label>
+            <input type="tel" id="custPhone" placeholder="0712345678" autocomplete="tel" required>
+          </div>
+          <button class="btn w-full" onclick="submitOrder()" id="submitOrderBtn" style="width:100%"><span class="mr-2">&#10148;</span>Continue to Payment</button>
+          <p class="text-xs text-[color:var(--paragraph-light)] text-center mt-3">You'll receive your tickets instantly by email &amp; SMS after payment.</p>
+        </div>
   </div>
 </div>
 
