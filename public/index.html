@@ -234,9 +234,9 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
   <div class="modal">
     <button class="close-btn" onclick="closeModal('checkoutModal')">&times;</button>
         <div class="mb-4 pb-4 border-b border-[color:var(--line)]">
-          <div class="text-xs uppercase tracking-widest font-semibold text-[color:var(--primary)] mb-1">Checkout · Step 1 of 2</div>
-          <h2 class="font-display text-2xl font-semibold mb-1">Continue to Payment</h2>
-          <p class="text-sm text-[color:var(--paragraph-light)]">Fill in your ticket holder details below — all fields are required.</p>
+          <div class="text-xs uppercase tracking-widest font-semibold text-[color:var(--primary)] mb-1">UON IS A COUNTRY</div>
+          <h2 class="font-display text-2xl font-semibold mb-1">Register for Event</h2>
+          <p class="text-sm text-[color:var(--paragraph-light)]">Enter your details to register for the event.</p>
         </div>
         <div id="checkoutSummary"></div>
         <div class="mt-4">
@@ -251,6 +251,13 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
           <div class="form-group">
             <label for="custPhone">Phone Number <span class="text-[color:var(--primary)]">*</span></label>
             <input type="tel" id="custPhone" autocomplete="tel" required>
+          </div>
+          <div class="mt-1 mb-1">
+            <div class="text-xs uppercase tracking-widest font-semibold text-[color:var(--paragraph-light)] mb-2 mt-3">Pay Using:</div>
+            <div class="payment-method selected" onclick="selectPayment('MPESA')" id="payMPESA_small"><span class="mr-2 font-bold text-[color:var(--primary)]">M-Pesa</span> <span class="ml-auto text-xs text-[color:var(--paragraph-light)]">STK Prompt</span></div>
+            <div class="payment-method" onclick="selectPayment('AIRTEL_MONEY')" id="payAIRTEL_small"><span class="mr-2 font-bold text-[color:var(--primary)]">Airtel</span> <span class="ml-auto text-xs text-[color:var(--paragraph-light)]">Money</span></div>
+            <div class="payment-method" onclick="selectPayment('CARD')" id="payCARD_small"><span class="mr-2 font-bold text-[color:var(--primary)]">CARD</span> <span class="ml-auto text-xs text-[color:var(--paragraph-light)]">Fast & Secure</span></div>
+            <p class="text-xs text-[color:var(--paragraph-light)] mt-3">You will receive an <strong>STK prompt</strong> on your phone to complete the payment.</p>
           </div>
           <button class="btn w-full" onclick="submitOrder()" id="submitOrderBtn" style="width:100%"><span class="mr-2">&#10148;</span>Continue to Payment</button>
           <p class="text-xs text-[color:var(--paragraph-light)] text-center mt-3">You'll receive your tickets instantly by email &amp; SMS after payment.</p>
