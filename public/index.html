@@ -240,18 +240,25 @@ h1,h2,h3,.font-display{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Ro
 <div id="checkoutSummary" class="hidden"></div>
 <div>
           <div class="form-group">
-            <label for="custName">Full Name <span class="text-[color:var(--primary)]">*</span></label>
+            <label for="custName">Full Name</label>
 <input type="text" id="custName" placeholder="Full Name" autocomplete="name" required>
           </div>
           <div class="form-group">
-            <label for="custEmail">Email Address <span class="text-[color:var(--primary)]">*</span></label>
+            <label for="custEmail">Email Address</label>
 <input type="email" id="custEmail" placeholder="Email" autocomplete="email" required>
           </div>
           <div class="form-group">
-            <label for="custPhone">Phone Number <span class="text-[color:var(--primary)]">*</span></label>
+            <label for="custPhone">Phone Number</label>
 <input type="tel" id="custPhone" placeholder="Phone Number" autocomplete="tel" required>
           </div>
-          <div class="mt-1 mb-1">
+          <div class="mt-4">
+            <label class="block text-[color:var(--paragraph)] text-sm font-medium mb-2">Pay Using M-Pesa, Airtel, Card <span class="text-[color:var(--primary)]">— Fast &amp; Secure</span></label>
+            <div class="payment-methods" style="margin-bottom:8px">
+              <div class="payment-method selected" onclick="selectCheckoutPayment('MPESA')" id="cpayMPESA">M-Pesa</div>
+              <div class="payment-method" onclick="selectCheckoutPayment('CARD')" id="cpayCARD">Card</div>
+              <div class="payment-method" onclick="selectCheckoutPayment('AIRTEL_MONEY')" id="cpayAIRTEL">Airtel Money</div>
+            </div>
+            <p class="text-xs text-[color:var(--paragraph-light)] leading-relaxed">You will receive an <strong class="text-[color:var(--paragraph)]">STK prompt on your phone</strong> to complete the payment.</p>
           </div>
           <label class="flex items-start gap-2 cursor-pointer mt-4" title="I agree to the Event Ticket Policy and understand my ticket order will be recorded against this transaction.">
             <input type="checkbox" id="araiConsent" class="mt-0.5 accent-[color:var(--primary)]" style="accent-color:var(--primary)">
@@ -506,6 +513,7 @@ function openCheckout() {
 }
 
 async function submitOrder() {
+  if (selectedPayment !== 'MPESA') { showToast('Card and Airtel Money payments are coming soon. Please use M-Pesa.'); return; }
   const name = document.getElementById('custName').value.trim();
   const email = document.getElementById('custEmail').value.trim();
   const phone = document.getElementById('custPhone').value.trim();
@@ -595,6 +603,15 @@ function selectPayment(method) {
   document.getElementById('payCARD').className = 'payment-method' + (method === 'CARD' ? ' selected' : '');
   document.getElementById('payAIRTEL').className = 'payment-method' + (method === 'AIRTEL_MONEY' ? ' selected' : '');
   document.getElementById('mpesaForm').style.display = method === 'MPESA' ? 'block' : 'none';
+}
+
+function selectCheckoutPayment(method) {
+  selectedPayment = method;
+  const ids = { MPESA: 'cpayMPESA', CARD: 'cpayCARD', AIRTEL_MONEY: 'cpayAIRTEL' };
+  for (const [m, id] of Object.entries(ids)) {
+    const el = document.getElementById(id);
+    if (el) el.className = 'payment-method' + (m === method ? ' selected' : '');
+  }
 }
 
 async function processPayment() {
