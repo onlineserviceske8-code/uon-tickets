@@ -233,11 +233,12 @@ h1,h2,h3,.font-display{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Ro
 <div class="modal-overlay" id="checkoutModal">
   <div class="modal">
     <button class="close-btn" onclick="closeModal('checkoutModal')">&times;</button>
-        <div class="mb-4 pb-4 border-b border-[color:var(--line)]">
+        <div class="mb-3 pb-3 border-b border-[color:var(--line)]">
 <h2 class="font-display text-2xl font-semibold mb-1">Register for Event</h2>
-          <p class="text-sm text-[color:var(--paragraph-light)]">Enter your details to register for the event.</p>
+          <p class="text-sm font-semibold text-[color:var(--paragraph)]">UON IS A COUNTRY</p>
         </div>
-<div id="checkoutSummary" class="hidden"></div>
+<div id="checkoutSummary" class="mb-3"></div>
+          <p class="text-xs text-[color:var(--paragraph-light)] mb-4">Enter your details to register for the event.</p>
 <div>
           <div class="form-group">
             <label for="custName">Full Name</label>
@@ -252,18 +253,15 @@ h1,h2,h3,.font-display{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Ro
 <input type="tel" id="custPhone" placeholder="Phone Number" autocomplete="tel" required>
           </div>
           <div class="mt-4">
-            <label class="block text-[color:var(--paragraph)] text-sm font-medium mb-2">Pay Using M-Pesa, Airtel, Card <span class="text-[color:var(--primary)]">— Fast &amp; Secure</span></label>
+            <label class="block text-[color:var(--paragraph)] text-sm font-medium mb-2">Pay Using:</label>
             <div class="payment-methods" style="margin-bottom:8px">
               <div class="payment-method selected" onclick="selectCheckoutPayment('MPESA')" id="cpayMPESA">M-Pesa</div>
-              <div class="payment-method" onclick="selectCheckoutPayment('CARD')" id="cpayCARD">Card</div>
-              <div class="payment-method" onclick="selectCheckoutPayment('AIRTEL_MONEY')" id="cpayAIRTEL">Airtel Money</div>
+              <div class="payment-method" onclick="selectCheckoutPayment('AIRTEL_MONEY')" id="cpayAIRTEL">Airtel</div>
+              <div class="payment-method" onclick="selectCheckoutPayment('CARD')" id="cpayCARD">Card <span class="text-[color:var(--primary)]">(Fast &amp; Secure)</span></div>
             </div>
             <p class="text-xs text-[color:var(--paragraph-light)] leading-relaxed">You will receive an <strong class="text-[color:var(--paragraph)]">STK prompt on your phone</strong> to complete the payment.</p>
           </div>
-          <label class="flex items-start gap-2 cursor-pointer mt-4" title="I agree to the Event Ticket Policy and understand my ticket order will be recorded against this transaction.">
-            <input type="checkbox" id="araiConsent" class="mt-0.5 accent-[color:var(--primary)]" style="accent-color:var(--primary)">
-            <span class="text-xs text-[color:var(--paragraph-light)] leading-relaxed">I have read and agree to the <strong class="text-[color:var(--paragraph)]">Event Ticket Policy</strong>, and I consent to this booking being <strong class="text-[color:var(--paragraph)]">recorded in the event logs</strong> (name, email, phone, tickets, amount payable). By continuing, you authorise the transaction prompt on the number provided.</span>
-          </label>
+          <p class="text-xs text-[color:var(--paragraph-light)] leading-relaxed mt-4">I have read and agree to the <strong class="text-[color:var(--paragraph)]">Event Ticket Policy</strong>, and I consent to this booking being <strong class="text-[color:var(--paragraph)]">recorded in the event logs</strong> (name, email, phone, tickets, amount payable). By continuing, you authorise the transaction prompt on the number provided.</p>
           <button class="btn w-full" onclick="submitOrder()" id="submitOrderBtn" style="width:100%"><span class="mr-2">&#10148;</span>Process payment</button>
           <p class="text-xs text-[color:var(--paragraph-light)] text-center mt-3">You'll receive your tickets instantly by email &amp; SMS after payment.</p>
         </div>
@@ -279,8 +277,8 @@ h1,h2,h3,.font-display{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Ro
       <div class="payment-method selected" onclick="selectPayment('MPESA')" id="payMPESA">
         M-Pesa
       </div>
+      <div class="payment-method" onclick="selectPayment('AIRTEL_MONEY')" id="payAIRTEL">Airtel</div>
       <div class="payment-method" onclick="selectPayment('CARD')" id="payCARD">Card</div>
-      <div class="payment-method" onclick="selectPayment('AIRTEL_MONEY')" id="payAIRTEL">Airtel Money</div>
     </div>
     <div id="paymentOrderInfo"></div>
     <div id="mpesaForm">
@@ -505,10 +503,17 @@ function getCartItems() {
 function openCheckout() {
   const items = getCartItems();
   if (items.length === 0) return;
-  const html = items.map(i => '<div class="flex justify-between py-2 border-b border-[color:var(--line)] text-sm"><span>' + i.quantity + 'x ' + escHtml(i.name) + '</span><span class="font-semibold">KES ' + (i.unitPrice * i.quantity).toLocaleString() + '</span></div>').join('');
+  const qty = items.reduce((s, i) => s + i.quantity, 0);
   const total = items.reduce((s, i) => s + i.unitPrice * i.quantity, 0);
-  document.getElementById('checkoutSummary').innerHTML = html +
-    '<div class="flex justify-between py-2 text-base font-semibold mt-2"><span>Total</span><span>KES ' + total.toLocaleString() + '</span></div>';
+  const lineItems = items.map(i => '<div class="flex justify-between py-1 text-sm"><span>' + i.quantity + 'x ' + escHtml(i.name) + '</span><span class="font-semibold">KES ' + (i.unitPrice * i.quantity).toLocaleString() + '</span></div>').join('');
+  document.getElementById('checkoutSummary').innerHTML =
+    '<div class="rounded-xl bg-[color:var(--bg)] border border-[color:var(--line)] px-4 py-3">' +
+      lineItems +
+      '<div class="flex justify-between items-center pt-2 mt-1 border-t border-[color:var(--line)] text-sm">' +
+        '<span class="font-semibold">' + (qty === 1 ? '1 Ticket' : qty + ' Tickets') + '</span>' +
+        '<span class="text-[color:var(--paragraph-light)]">Amount Payable: <strong class="text-[color:var(--paragraph)]">KES ' + total.toLocaleString() + '</strong></span>' +
+      '</div>' +
+    '</div>';
   openModal('checkoutModal');
 }
 
@@ -521,8 +526,6 @@ async function submitOrder() {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('Please enter a valid email'); return; }
   const msisdn = normalizeMpesaPhone(phone);
   if (!msisdn) { showToast('Enter a valid Safaricom number (07, 01, 2547 or 2541 format)'); return; }
-  const consent = document.getElementById('araiConsent');
-  if (!consent || !consent.checked) { showToast('Please accept the agreement to continue'); return; }
   try { localStorage.setItem('arai_consent_v1', JSON.stringify({ agreedAt: Date.now(), agreedBy: name, email: email, phone: phone })); } catch (e) {}
   const btn = document.getElementById('submitOrderBtn');
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Creating order...';
