@@ -30,7 +30,7 @@ const TICKET_STYLES = `
 function generateTicketCard(ticket, order, event) {
   return `<div class="ticket">
     <div class="header">
-      <div class="logo">ðŸŽ« ZENLIPA TICKET</div>
+      <div class="logo">ZENLIPA TICKET</div>
       <div class="event-name">${event.name}</div>
     </div>
     <div class="details">
@@ -390,14 +390,14 @@ function buildTicketEmailHTML(order, event) {
   return `
   <div style="font-family:Arial,sans-serif;max-width:620px;margin:0 auto">
     <div style="background:#ffd100;color:#18181b;border-radius:12px 12px 0 0;padding:24px;text-align:center">
-      <div style="font-size:24px;font-weight:800">ðŸŽ« ZENLIPA</div>
+      <div style="font-size:24px;font-weight:800">ZENLIPA</div>
       <div style="margin-top:4px;font-weight:bold">Your tickets are confirmed!</div>
     </div>
     <div style="border:1px solid #e4e4e7;border-top:none;border-radius:0 0 12px 12px;padding:24px">
       <p style="margin:0 0 16px;font-size:14px;color:#3f3f46">Hi <strong>${order.customer.name}</strong>, thank you for your payment. Here are your tickets:</p>
       ${ticketsHtml}
       <div style="margin-top:20px;padding:12px;background:#fafafa;border-radius:8px;font-size:13px;color:#71717a">
-        <strong>Order:</strong> ${order.orderNumber} Â· <strong>Total paid:</strong> KES ${order.total}
+        <strong>Order:</strong> ${order.orderNumber} · <strong>Total paid:</strong> KES ${order.total}
       </div>
       <p style="margin:20px 0 0;font-size:12px;color:#9ca3af">Tickets are non-transferable.</p>
     </div>

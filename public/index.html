@@ -6,7 +6,7 @@
 <title>UON IS A COUNTRY - Uon Tickets</title>
 <meta name="description" content="Step into a world where UON IS A COUNTRY, an event that promises to transport you to a land of creativity and imagination. Join us at UON IS A COUNTRY and witness the magic unfold."/>
 <meta property="og:title" content="UON IS A COUNTRY"/>
-<meta property="og:description" content="Join us on 24 Sep 2026 at Taifa Hall, Main Campus, Nairobi, Kenya for UON IS A COUNTRY â€” an unforgettable celebration of art, culture, and entertainment."/>
+<meta property="og:description" content="Join us on 24 Sep 2026 at Taifa Hall, Main Campus, Nairobi, Kenya for UON IS A COUNTRY — an unforgettable celebration of art, culture, and entertainment."/>
 <meta property="og:type" content="website"/>
 <meta property="og:url" content="https://uon-tickets.vercel.app"/>
 <meta property="og:image" content="poster.jpg"/>
@@ -43,18 +43,18 @@
 }
 </script>
 <link rel="icon" href="/favicon.ico"/>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"/>
 <link rel="stylesheet" href="/tailwind.css">
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
 <style>
 :root{--primary:#9BD35B;--primary-100:#F3F8E8;--primary-400:#18181B;--primary-dark:#164418;--primary:#9BD35B;--paragraph:#FFFFFF;--paragraph-light:#D4D4D8;--line:#27272A;--bg:#000000;--bg-soft:#000000;--card:#000000;--btn-hover:#22c55e;--glass-bg:rgba(0,0,0,.88);--glass-line:rgba(255,255,255,.08)}
 html{scroll-behavior:smooth;line-height:1.5}
-body{font-family:'Plus Jakarta Sans',Inter,system-ui,sans-serif;color:var(--paragraph);background:var(--bg);margin:0;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
-.font-ui{font-family:'Plus Jakarta Sans',Inter,system-ui,sans-serif}
+body{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--paragraph);background:var(--bg);margin:0;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+h1,h2,h3,.font-display{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-weight:600}
+.font-ui{font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
 .container-x{margin:0 auto;width:100%;max-width:1290px;padding:0 20px}
 .nav-glass{backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(9,9,11,.7);border-bottom-color:var(--line)}
-.btn{position:relative;z-index:0;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;border:0;cursor:pointer;border-radius:30px;padding:13px 30px;font-family:'Plus Jakarta Sans',sans-serif;font-size:1rem;font-weight:500;line-height:1.5rem;letter-spacing:-.3px;color:#fff;background:var(--primary);transition:color .2s}
+.btn{position:relative;z-index:0;overflow:hidden;display:inline-flex;align-items:center;justify-content:center;border:0;cursor:pointer;border-radius:30px;padding:13px 30px;font-family:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;font-size:1rem;font-weight:500;line-height:1.5rem;letter-spacing:-.3px;color:#fff;background:var(--primary);transition:color .2s}
 .btn:after{position:absolute;inset:0;border-radius:30px;background:var(--primary);content:"";z-index:-2}
 .btn:before{position:absolute;left:0;bottom:0;height:100%;width:100%;border-radius:30px;background:var(--btn-hover);content:"";z-index:-1;transform:scaleX(0);transform-origin:right;transition:transform .5s cubic-bezier(.4,0,.2,1)}
 .btn:hover:before{transform:scaleX(1);transform-origin:left}
@@ -204,7 +204,7 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
     <div class="mb-20 grid grid-cols-12 gap-y-10 max-lg:text-center">
       <div class="col-span-12 lg:col-span-6 max-lg:mx-auto">
         <span class="mb-10 inline-flex gap-2 font-ui text-2xl font-extrabold tracking-tight">UON <span class="text-[color:var(--primary)]">TICKETS</span></span>
-        <p class="max-w-[350px] max-lg:mx-auto text-base text-[color:var(--paragraph-light)]">Secure your spot at UON IS A COUNTRY â€” Taifa Hall, Main Campus, Nairobi.</p>
+        <p class="max-w-[350px] max-lg:mx-auto text-base text-[color:var(--paragraph-light)]">Secure your spot at UON IS A COUNTRY — Taifa Hall, Main Campus, Nairobi.</p>
       </div>
       <div class="col-span-12 text-center lg:text-left lg:col-span-2">
         <h3 class="font-ui mb-8 text-lg font-medium">Explore</h3>
@@ -279,11 +279,10 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
     <div id="mpesaForm">
       <div class="form-group">
         <label>M-Pesa Phone Number</label>
-        <input type="tel" id="mpesaPhone" placeholder="254712345678" value="254">
+        <input type="tel" id="mpesaPhone" placeholder="0712345678">
       </div>
     </div>
     <button class="btn w-full" onclick="processPayment()" id="payBtn" style="width:100%">Pay Now</button>
-    <button class="mt-2 w-full rounded-full border-2 border-dashed border-amber-400 px-6 py-3 text-sm font-semibold text-amber-700 transition hover:bg-amber-50 hidden" onclick="simulatePayment()" id="simulateBtn">âš¡ Simulate Payment (Test Only)</button>
   </div>
 </div>
 
@@ -291,13 +290,12 @@ h1,h2,h3,.font-display{font-family:'Playfair Display',serif;font-weight:600}
 <div class="modal-overlay" id="successModal">
   <div class="modal text-center">
     <button class="close-btn" onclick="closeModal('successModal')">&times;</button>
-    <div class="text-5xl mb-3">ðŸŽ‰</div>
     <h2 class="font-display text-2xl font-semibold mb-1">Payment Successful!</h2>
     <p class="text-sm text-[color:var(--paragraph-light)] mb-1">Your tickets have been confirmed.</p>
     <p class="text-xs text-[color:var(--paragraph-light)] mb-4">A copy has also been sent to your email.</p>
     <div id="successOrderInfo"></div>
     <div id="successTickets" class="mt-4 space-y-3 text-left"></div>
-    <button class="btn w-full" onclick="downloadTickets()" style="width:100%">â¬‡ Download Tickets</button>
+    <button class="btn w-full" onclick="downloadTickets()" style="width:100%">Download Tickets</button>
     <button class="mt-2 w-full rounded-full border border-[color:var(--paragraph)] px-6 py-3 text-sm font-semibold text-[color:var(--paragraph)] transition hover:bg-zinc-100" onclick="closeModal('successModal')">Done</button>
   </div>
 </div>
@@ -341,6 +339,12 @@ let cart = {};
 let selectedPayment = 'MPESA';
 let currentOrder = null;
 let testMode = false;
+
+function normalizeMpesaPhone(p) {
+  let d = String(p == null ? '' : p).replace(/[^0-9]/g, '');
+  if (d.length === 10 && d.startsWith('0')) d = '254' + d.slice(1);
+  return /^254[17]\d{8}$/.test(d) ? d : null;
+}
 
 async function apiFetch(path, opts = {}) {
   const res = await fetch(API + path, { ...opts, headers: { 'Content-Type': 'application/json', ...opts.headers }, credentials: 'omit', signal: opts.signal });
@@ -507,6 +511,8 @@ async function submitOrder() {
   const phone = document.getElementById('custPhone').value.trim();
   if (!name || !email || !phone) { showToast('Please fill in all fields'); return; }
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('Please enter a valid email'); return; }
+  const msisdn = normalizeMpesaPhone(phone);
+  if (!msisdn) { showToast('Enter a valid Safaricom number (07, 01, 2547 or 2541 format)'); return; }
   const consent = document.getElementById('araiConsent');
   if (!consent || !consent.checked) { showToast('Please accept the agreement to continue'); return; }
   try { localStorage.setItem('arai_consent_v1', JSON.stringify({ agreedAt: Date.now(), agreedBy: name, email: email, phone: phone })); } catch (e) {}
@@ -515,11 +521,11 @@ async function submitOrder() {
   showLoading('Creating your order...');
   try {
     const items = getCartItems().map(i => ({ typeId: i.typeId, quantity: i.quantity }));
-    const result = await apiFetch('/checkout/initiate', { method: 'POST', body: JSON.stringify({ eventId: EVENT_ID, tickets: items, customer: { name, email, phone: '254' + phone.slice(1) } }) });
+    const result = await apiFetch('/checkout/initiate', { method: 'POST', body: JSON.stringify({ eventId: EVENT_ID, tickets: items, customer: { name, email, phone: msisdn } }) });
     currentOrder = result;
     logOrderTransaction('initiate', result, items);
     closeModal('checkoutModal');
-    sendStkPush(phone);
+    sendStkPush(msisdn);
   } catch (e) { showToast('Checkout failed: ' + e.message); }
   finally { btn.disabled = false; btn.textContent = 'Continue to Payment'; hideLoading(); }
 }
@@ -529,9 +535,8 @@ async function sendStkPush(phone) {
   if (!btn) return;
   const elements = { name: document.getElementById('custName').value.trim(), email: document.getElementById('custEmail').value.trim() };
   if (!currentOrder || !currentOrder.sessionId) { showToast('Order lost. Please restart checkout.'); return; }
-  phone = phone.replace(/[^0-9]/g, '');
-  if (/^07\d{8}$/.test(phone)) phone = '254' + phone.slice(1);
-  if (!/^254[17]\d{8}$/.test(phone)) { showToast('Enter a valid Safaricom number (07XXXXXXXX or 2547XXXXXXXX)'); return; }
+  phone = normalizeMpesaPhone(phone);
+  if (!phone) { showToast('Enter a valid Safaricom number (07, 01, 2547 or 2541 format)'); return; }
   btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Sending STK Push...';
   showLoading('Sending payment request to M-Pesa...');
   const controller = new AbortController();
@@ -558,7 +563,7 @@ async function sendStkPush(phone) {
       '<button class="close-btn" onclick="closeModal(\'checkoutModal\')">&times;</button>' +
       '<h2 class="font-display text-2xl font-semibold mb-4 text-center">Complete Payment</h2>' +
       '<div class="p-4 rounded-xl bg-amber-50 border border-amber-200 mb-4 text-center">' +
-      '<p class="text-lg font-semibold text-amber-800 mb-1">&#10003; Check your phone</p>' +
+      '<p class="text-lg font-semibold text-amber-800 mb-1">Check your phone</p>' +
       '<p class="text-sm text-amber-700">We sent an M-Pesa prompt to <strong>' + escHtml(displayPhone) + '</strong></p>' +
       '</div>' +
       '<p class="text-sm text-[color:var(--paragraph-light)] text-center mb-4">Order: <strong>' + escHtml(currentOrder.orderNumber) + '</strong> &mdash; KES ' + Number(currentOrder.total).toLocaleString() + '</p>' +
@@ -600,9 +605,8 @@ async function processPayment() {
     btn.disabled = true; btn.innerHTML = '<span class="spinner"></span> Sending STK Push...';
     showLoading('Sending payment request to M-Pesa...');
     try {
-      let phone = document.getElementById('mpesaPhone').value.trim().replace(/[^0-9]/g, '');
-      if (/^07\d{8}$/.test(phone)) phone = '254' + phone.slice(1);
-      if (!/^254[17]\d{8}$/.test(phone)) { showToast('Enter a valid Safaricom number (2547XXXXXXXX or 07XXXXXXXX)'); btn.disabled = false; btn.textContent = 'Pay Now'; hideLoading(); return; }
+      const phone = normalizeMpesaPhone(document.getElementById('mpesaPhone').value);
+      if (!phone) { showToast('Enter a valid Safaricom number (07, 01, 2547 or 2541 format)'); btn.disabled = false; btn.textContent = 'Pay Now'; hideLoading(); return; }
 
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 15000);
@@ -638,10 +642,10 @@ async function processPayment() {
           '<button class="close-btn" onclick="closeModal(\'paymentModal\')">&times;</button>' +
           '<h2 class="font-display text-2xl font-semibold mb-4 text-center">Complete Payment</h2>' +
           '<div class="p-4 rounded-xl bg-amber-50 border border-amber-200 mb-4 text-center">' +
-          '<p class="text-lg font-semibold text-amber-800 mb-1">ðŸ“± Check your phone</p>' +
+          '<p class="text-lg font-semibold text-amber-800 mb-1">Check your phone</p>' +
           '<p class="text-sm text-amber-700">We sent an M-Pesa prompt to <strong>' + escHtml(displayPhone) + '</strong></p>' +
           '</div>' +
-          '<p class="text-sm text-[color:var(--paragraph-light)] text-center mb-4">Order: <strong>' + escHtml(currentOrder.orderNumber) + '</strong> â€” KES ' + Number(currentOrder.total).toLocaleString() + '</p>' +
+          '<p class="text-sm text-[color:var(--paragraph-light)] text-center mb-4">Order: <strong>' + escHtml(currentOrder.orderNumber) + '</strong> — KES ' + Number(currentOrder.total).toLocaleString() + '</p>' +
           '<div class="mt-4 text-center">' +
           '<div class="inline-flex items-center gap-3 rounded-xl bg-[color:var(--bg)] px-5 py-3 mx-auto">' +
           '<span class="text-2xl font-bold tabular-nums" id="pollCountdown">3:00</span>' +
@@ -691,7 +695,7 @@ async function runPollCheck(sessionId) {
     const res = await apiFetch('/payments/status/' + sessionId);
     if (res.status === 'completed' || res.paymentStatus === 'paid') {
       if (pollInterval) { clearInterval(pollInterval); pollInterval = null; }
-      if (pollStatusEl) pollStatusEl.textContent = 'Payment confirmed âœ“';
+      if (pollStatusEl) pollStatusEl.textContent = 'Payment confirmed';
       await showSuccess();
       closeModal('paymentModal');
       setTimeout(() => { downloadTickets(); }, 500);
@@ -835,7 +839,7 @@ function buildTicketDoc(order, qrMap) {
             '<div class="tk-row"><span>Ticket ID</span><b class="tkid">' + escHtml((t.id || '').substring(0, 14)) + '</b></div>' +
           '</div>' +
         '</div>' +
-        '<div class="tk-foot">Admit one Â· ' + escHtml((order.customer && order.customer.name) || 'Holder') + '</div>' +
+        '<div class="tk-foot">Admit one · ' + escHtml((order.customer && order.customer.name) || 'Holder') + '</div>' +
       '</div>';
   }).join('');
 
@@ -872,8 +876,8 @@ function buildTicketDoc(order, qrMap) {
       '<button onclick="window.close()">Close</button>' +
     '</div>' +
     '<div class="sheet">' +
-      '<div class="title"><h1>UON TICKETS Â· UON IS A COUNTRY</h1>' +
-      '<p>Order ' + escHtml(order.orderNumber || '') + ' Â· ' + tickets.length + ' ticket(s) Â· Total KES ' + total + '</p></div>' +
+      '<div class="title"><h1>UON TICKETS · UON IS A COUNTRY</h1>' +
+      '<p>Order ' + escHtml(order.orderNumber || '') + ' · ' + tickets.length + ' ticket(s) · Total KES ' + total + '</p></div>' +
       cards +
     '</div>' +
     '<script>setTimeout(function(){window.print();},500);<\/script>' +
